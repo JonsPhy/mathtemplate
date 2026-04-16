@@ -1,0 +1,184 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{style/project}[2026/04/16 Combined LaTeX project template]
+
+% Language and typography
+\usepackage[english,ngerman]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{textcomp}
+\usepackage{lmodern}
+
+% Math
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{mathrsfs}
+\usepackage{physics}
+\usepackage{siunitx}
+
+% Layout
+\usepackage[a4paper,margin=2.5cm,headheight=14pt]{geometry}
+\usepackage{setspace}
+\usepackage{parskip}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{float}
+\usepackage{lscape}
+\usepackage{tabularx}
+\setstretch{1.1}
+\parindent0pt
+\parskip0.35em
+
+% Graphics
+\usepackage{graphicx}
+\graphicspath{{figures/}}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,calc,cd}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.17}
+
+% Color and theorem boxes
+\usepackage[dvipsnames]{xcolor}
+\usepackage{framed}
+\usepackage{environ}
+\usepackage[most]{tcolorbox}
+\tcbuselibrary{theorems,skins,breakable}
+
+% Bibliography and links
+\usepackage[numbers,square]{natbib}
+\usepackage[hyphens]{url}
+\def\UrlBreaks{\do\/\do-\do\_\do\.}
+\usepackage[hidelinks]{hyperref}
+\hypersetup{
+    hidelinks,
+    linkcolor=blue,
+    citecolor=blue,
+    filecolor=magenta,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Code listings
+\usepackage{listings}
+\definecolor{background}{rgb}{0.15, 0.15, 0.15}
+\definecolor{foreground}{rgb}{0.9, 0.9, 0.9}
+\definecolor{keywordcolor}{rgb}{0.98, 0.47, 0.24}
+\definecolor{stringcolor}{rgb}{0.68, 0.91, 0.65}
+\definecolor{commentcolor}{rgb}{0.5, 0.5, 0.5}
+\definecolor{identifiercolor}{rgb}{0.65, 0.85, 1.0}
+\definecolor{numbercolor}{rgb}{0.8, 0.8, 0.8}
+\definecolor{framecolor}{rgb}{0.25, 0.25, 0.25}
+
+\lstdefinestyle{projectlisting}{
+    backgroundcolor=\color{background},
+    basicstyle=\ttfamily\small\color{foreground},
+    commentstyle=\color{commentcolor}\textit,
+    keywordstyle=\color{keywordcolor}\bfseries,
+    stringstyle=\color{stringcolor},
+    identifierstyle=\color{identifiercolor},
+    numberstyle=\tiny\color{numbercolor},
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=10pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=4,
+    xleftmargin=15pt,
+    frame=single,
+    rulecolor=\color{framecolor},
+    frameround=tttt,
+    aboveskip=10pt,
+    belowskip=10pt,
+    morekeywords={input,include,print,println,repeat,until,local,function,end}
+}
+\lstset{style=projectlisting}
+
+% Header and footer
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\nouppercase{\leftmark}}
+\fancyhead[R]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\setlength{\headheight}{14pt}
+
+% Section numbering in TOC depth
+\setcounter{tocdepth}{2}
+\setcounter{secnumdepth}{3}
+
+% Inputs
+\input{style/commands}
+\input{style/theorems}
+
+% Front/back matter helpers for report class
+\newcommand{\frontmatter}{
+    \clearpage
+    \pagenumbering{roman}
+    \setcounter{page}{1}
+}
+
+\newcommand{\mainmatter}{
+    \clearpage
+    \pagenumbering{arabic}
+    \setcounter{page}{1}
+}
+
+\newcommand{\backmatter}{
+    \clearpage
+}
+
+% Title page
+\newcommand{\makeprojecttitle}{
+    \hypersetup{pageanchor=false}
+    \begin{titlepage}
+        \centering
+        \vspace*{3.2cm}
+
+        {\fontsize{26}{32}\selectfont\bfseries \projecttitle\par}
+        \vspace{0.6cm}
+        {\Large \projectsubtitle\par}
+
+        \vspace{1.8cm}
+        \IfFileExists{\projectlogo}{
+            \includegraphics[width=0.28\textwidth]{\projectlogo}\par
+        }{
+            \fbox{\rule{0pt}{3cm}\rule{0.28\textwidth}{0pt}}\par
+        }
+
+        \vspace{1.6cm}
+        {\Large \projecttype\par}
+        \vspace{0.8cm}
+        {\large \projectdepartment\par}
+        {\large \projectinstitution\par}
+
+        \vfill
+
+        {\large \textbf{Author:} \projectauthor\par}
+        \vspace{0.3cm}
+        {\large \textbf{Supervisor / Lecturer:} \projectsupervisor\par}
+        \vspace{0.3cm}
+        {\large \projectdate\par}
+    \end{titlepage}
+    \hypersetup{pageanchor=true}
+}
+
+\newcommand{\printprojectbibliography}{
+    \cleardoublepage
+    \addcontentsline{toc}{chapter}{Bibliography}
+    \bibliographystyle{\projectbibliographystyle}
+    \bibliography{\projectbibliographyfile}
+
+    \ifincludeauthordeclaration
+        \cleardoublepage
+        {\huge \textbf{\authordeclarationtitle}\par}
+        \vspace{1.2cm}
+        \authordeclarationtext\par
+        \vspace{1.6cm}
+        \projectauthor\hfill\projectdate\par
+    \fi
+}

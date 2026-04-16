@@ -1,0 +1,200 @@
+\newtcbtheorem[number within=section]{mydefinition}{Definition}
+{
+    enhanced,
+    frame hidden,
+    titlerule=0mm,
+    toptitle=1mm,
+    bottomtitle=1mm,
+    fonttitle=\bfseries\large,
+    coltitle=black,
+    colbacktitle=red!20!white,
+    colback=red!10!white,
+}{defn}
+
+\newtcbtheorem[use counter from=mydefinition]{mytheorem}{Theorem}
+{
+    enhanced,
+    frame hidden,
+    titlerule=0mm,
+    toptitle=1mm,
+    bottomtitle=1mm,
+    fonttitle=\bfseries\large,
+    coltitle=black,
+    colbacktitle=purple!20!white,
+    colback=purple!10!white,
+}{thm}
+
+\newtcbtheorem[use counter from=mydefinition]{mylemma}{Lemma}
+{
+    enhanced,
+    frame hidden,
+    titlerule=0mm,
+    toptitle=1mm,
+    bottomtitle=1mm,
+    fonttitle=\bfseries\large,
+    coltitle=black,
+    colbacktitle=violet!20!white,
+    colback=violet!10!white,
+}{lem}
+
+\newtcbtheorem[use counter from=mydefinition]{mycorollary}{Corollary}
+{
+    enhanced,
+    frame hidden,
+    titlerule=0mm,
+    toptitle=1mm,
+    bottomtitle=1mm,
+    fonttitle=\bfseries\large,
+    coltitle=black,
+    colbacktitle=orange!20!white,
+    colback=orange!10!white,
+}{cor}
+
+\newtcbtheorem[use counter from=mydefinition]{myproposition}{Proposition}
+{
+    enhanced,
+    frame hidden,
+    titlerule=0mm,
+    toptitle=1mm,
+    bottomtitle=1mm,
+    fonttitle=\bfseries\large,
+    coltitle=black,
+    colbacktitle=yellow!30!white,
+    colback=yellow!20!white,
+}{prop}
+
+\newtcbtheorem[use counter from=mydefinition]{myfact}{Fact}
+{
+    enhanced,
+    frame hidden,
+    titlerule=0mm,
+    toptitle=1mm,
+    bottomtitle=1mm,
+    fonttitle=\bfseries\large,
+    coltitle=black,
+    colbacktitle=blue!20!white,
+    colback=blue!8!white,
+}{fact}
+
+\NewDocumentCommand{\defn}{m+m}{
+    \begin{mydefinition}{#1}{}
+        #2
+    \end{mydefinition}
+}
+
+\NewDocumentCommand{\defnr}{mm+m}{
+    \begin{mydefinition}{#1}{#2}
+        #3
+    \end{mydefinition}
+}
+
+\NewDocumentCommand{\thm}{m+m}{
+    \begin{mytheorem}{#1}{}
+        #2
+    \end{mytheorem}
+}
+
+\NewDocumentCommand{\thmr}{mm+m}{
+    \begin{mytheorem}{#1}{#2}
+        #3
+    \end{mytheorem}
+}
+
+\NewDocumentCommand{\lem}{m+m}{
+    \begin{mylemma}{#1}{}
+        #2
+    \end{mylemma}
+}
+
+\NewDocumentCommand{\cor}{+m}{
+    \begin{mycorollary}{}{}
+        #1
+    \end{mycorollary}
+}
+
+\NewDocumentCommand{\prop}{+m}{
+    \begin{myproposition}{}{}
+        #1
+    \end{myproposition}
+}
+
+\NewDocumentCommand{\fact}{+m}{
+    \begin{myfact}{}{}
+        #1
+    \end{myfact}
+}
+
+\newenvironment{projectproof}[1][Proof.]{
+    \par
+    \noindent\textit{\textbf{#1}}\par
+    \begin{tcolorbox}[
+        blanker,
+        breakable,
+        left=5mm,
+        parbox=false,
+        before upper={\parindent15pt},
+        after skip=10pt,
+        borderline west={1mm}{0pt}{black!20}
+    ]
+}{
+    \hfill$\blacksquare$
+    \end{tcolorbox}
+}
+
+\NewDocumentCommand{\pf}{+m}{
+    \begin{projectproof}
+        #1
+    \end{projectproof}
+}
+
+\newenvironment{example}{
+    \par
+    \vspace{5pt}
+    \noindent\textbf{Example.}
+    \begin{tcolorbox}[
+        blanker,
+        breakable,
+        left=5mm,
+        parbox=false,
+        before upper={\parindent15pt},
+        after skip=10pt,
+        borderline west={1mm}{0pt}{cyan!20!white}
+    ]
+}{
+    \end{tcolorbox}
+    \vspace{5pt}
+}
+
+\NewDocumentCommand{\ex}{+m}{
+    \begin{example}
+        #1
+    \end{example}
+}
+
+\newenvironment{remark}{
+    \par
+    \vspace{5pt}
+    \noindent\textbf{Remark.}
+    \begin{tcolorbox}[
+        blanker,
+        breakable,
+        left=5mm,
+        parbox=false,
+        before upper={\parindent15pt},
+        after skip=10pt,
+        borderline west={1mm}{0pt}{cyan!20!white}
+    ]
+}{
+    \end{tcolorbox}
+    \vspace{5pt}
+}
+
+\NewDocumentCommand{\rmk}{+m}{
+    {\itshape\color{blue!60!black}#1}
+}
+
+\NewDocumentCommand{\rmkb}{+m}{
+    \begin{remark}
+        #1
+    \end{remark}
+}

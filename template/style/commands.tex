@@ -1,0 +1,80 @@
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\D}{\mathrm{d}}
+\newcommand{\E}{\mathrm{e}}
+\newcommand{\I}{\mathrm{i}}
+\newcommand{\bs}{\boldsymbol}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\lcm}{lcm}
+\newcommand*\nabla{\mathop{}\!\mathbin\bigtriangleup}
+\newcommand*\quabla{\mathop{}\!\mathbin\Box}
+
+\ExplSyntaxOn
+
+\msg_new:nnn { permu } { length-mismatch }
+  { The~lists~in~\string\permu~must~have~the~same~length. }
+
+\msg_new:nnn { permu } { missing-image }
+  { The~image~'#1'~in~\string\permu~does~not~occur~in~the~top~row. }
+
+\seq_new:N \l__permu_top_seq
+\seq_new:N \l__permu_img_seq
+\int_new:N \l__permu_len_int
+\int_new:N \l__permu_target_int
+
+\cs_new_protected:Npn \__permu_find_index:n #1
+{
+    \int_zero:N \l__permu_target_int
+    \seq_map_indexed_inline:Nn \l__permu_top_seq
+    {
+        \str_if_eq:eeT { \tl_trim_spaces:n { ##2 } } { \tl_trim_spaces:n { #1 } }
+        {
+            \int_set:Nn \l__permu_target_int { ##1 }
+        }
+    }
+}
+
+\cs_new_protected:Npn \__permu_draw:nn #1 #2
+{
+    \seq_set_split:Nnn \l__permu_top_seq { , } { #1 }
+    \seq_set_split:Nnn \l__permu_img_seq { , } { #2 }
+    \int_set:Nn \l__permu_len_int { \seq_count:N \l__permu_top_seq }
+
+    \int_compare:nNnF
+        { \l__permu_len_int }
+        =
+        { \seq_count:N \l__permu_img_seq }
+        { \msg_error:nn { permu } { length-mismatch } }
+
+    \begin{tikzpicture}[baseline={(0,0)}]
+        \seq_map_indexed_inline:Nn \l__permu_top_seq
+        {
+            \node (permutop##1) at ({1.15*(##1-1)},0.65) {$\scriptstyle ##2$};
+            \node (permubot##1) at ({1.15*(##1-1)},-0.65) {$\scriptstyle ##2$};
+        }
+
+        \seq_map_indexed_inline:Nn \l__permu_img_seq
+        {
+            \__permu_find_index:n { ##2 }
+
+            \int_compare:nNnTF { \l__permu_target_int } > { 0 }
+            {
+                \pgfsetlinewidth{0.9pt}
+                \draw (permutop##1.south) -- (permubot\int_use:N \l__permu_target_int.north);
+            }
+            {
+                \msg_error:nnn { permu } { missing-image } { ##2 }
+            }
+        }
+    \end{tikzpicture}
+}
+
+\NewDocumentCommand{\permu}{m m}
+{
+    \__permu_draw:nn { #1 } { #2 }
+}
+
+\ExplSyntaxOff
