@@ -1,0 +1,49 @@
+\newtcbtheorem[number within=section]{myexercise}{Exercise}
+{
+    enhanced,
+    frame hidden,
+    titlerule=0mm,
+    toptitle=1mm,
+    bottomtitle=1mm,
+    fonttitle=\bfseries\large,
+    coltitle=black,
+    colbacktitle=teal!20!white,
+    colback=teal!10!white,
+}{ex}
+
+\newtcbtheorem[use counter from=myexercise]{myhomework}{Homework}
+{
+    enhanced,
+    frame hidden,
+    titlerule=0mm,
+    toptitle=1mm,
+    bottomtitle=1mm,
+    fonttitle=\bfseries\large,
+    coltitle=black,
+    colbacktitle=green!25!white,
+    colback=green!10!white,
+}{hw}
+
+\NewDocumentCommand{\exercise}{m+m}{
+    \begin{myexercise}{#1}{}
+        #2
+    \end{myexercise}
+}
+
+\NewDocumentCommand{\exerciser}{mm+m}{
+    \begin{myexercise}{#1}{#2}
+        #3
+    \end{myexercise}
+}
+
+\NewDocumentCommand{\hw}{m+m}{
+    \begin{myhomework}{#1}{}
+        #2
+    \end{myhomework}
+}
+
+\NewDocumentCommand{\hwr}{mm+m}{
+    \begin{myhomework}{#1}{#2}
+        #3
+    \end{myhomework}
+}

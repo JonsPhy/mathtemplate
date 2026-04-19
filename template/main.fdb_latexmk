@@ -1,13 +1,13 @@
 # Fdb version 4
-["bibtex main"] 0 "main.aux" "main.bbl" "main" 1776339493.41481 -1
+["bibtex main"] 1776416187.69038 "main.aux" "main.bbl" "main" 1776416190.70789 0
   "./ref/references.bib" 1776336510.33538 145 dfe358370106c7848b96d3f6e4dbbaa8 ""
   "/usr/local/texlive/2024/texmf-dist/bibtex/bst/base/alpha.bst" 1292289607 23907 a5f93555796fb564b924339521f10a7c ""
-  "main.aux" 1776339492.80595 1507 49e77c05c1cc98fef7448322523b0a13 "pdflatex"
+  "main.aux" 1776416190.31467 1574 4aa857c13941a92a6599eeecc985565e "pdflatex"
   (generated)
   "main.bbl"
   "main.blg"
   (rewritten before read)
-["pdflatex"] 1776339490.22339 "/Users/jonasvonstein/latex_scripts/mathtemplate/template/main.tex" "main.pdf" "main" 1776339493.41521 2
+["pdflatex"] 1776416187.85011 "/Users/jonasvonstein/latex_scripts/mathtemplate/template/main.tex" "main.pdf" "main" 1776416190.70812 0
   "/Users/jonasvonstein/latex_scripts/mathtemplate/template/main.tex" 1776336510.3336 320 6994e34c5b1a6bbd9b32bab158c31be7 ""
   "/usr/local/texlive/2024/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc" 1254269338 2375 baa924870cfb487815765f9094cf3728 ""
   "/usr/local/texlive/2024/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc" 1202520719 2405 5dcf2c1b967ee25cc46c58cd52244aed ""
@@ -293,17 +293,18 @@
   "/usr/local/texlive/2024/texmf-var/web2c/pdftex/pdflatex.fmt" 1734955391 8221440 1a6135359115fd10c258c0b00c08ebc0 ""
   "/usr/local/texlive/2024/texmf.cnf" 1710266656 577 e590dabc9e28c5b61546e15f63eebcdf ""
   "content/01_intro.tex" 1776336510.33479 735 068d90adf25ab8c66be8ba8d890b3912 ""
-  "content/02_foundations.tex" 1776336510.33498 525 fcbb42d13fc7d2821698ce158c3e0340 ""
-  "content/03_results.tex" 1776339052.49481 311 672fa7eebd940d847de154fcb15b05c9 ""
+  "content/02_foundations.tex" 1776416028.69264 590 8be362424d6c7facdc231c606946a5cb ""
+  "content/03_results.tex" 1776416181.51359 287 705187e4cd502d81094d2f9bc57136b2 ""
   "figures/lmu_siege1.pdf" 1776339230.40447 20464 4c682d4eed2de959d1d1ff463f5fa093 ""
-  "main.aux" 1776339492.80595 1507 49e77c05c1cc98fef7448322523b0a13 "pdflatex"
-  "main.bbl" 1776339234.89484 0 d41d8cd98f00b204e9800998ecf8427e "bibtex main"
-  "main.out" 1776339492.80669 831 823c2de65cc7c054c9d81e0734347ab4 "pdflatex"
+  "main.aux" 1776416190.31467 1574 4aa857c13941a92a6599eeecc985565e "pdflatex"
+  "main.bbl" 1776416187.84478 49 0eba253fc001332e731e8aba3f23127b "bibtex main"
+  "main.out" 1776416190.31592 935 6ebfa7a491f05b48dcd7dd1ceadd5526 "pdflatex"
   "main.tex" 1776336510.3336 320 6994e34c5b1a6bbd9b32bab158c31be7 ""
-  "main.toc" 1776339492.807 531 f635aeff5cdbd67ff5f90ba855415ef6 "pdflatex"
+  "main.toc" 1776416190.3162 585 a0b24ee73dd62477cc2bbf7da70e7f30 "pdflatex"
   "metadata.tex" 1776339232.69446 942 845cf09e8898796c612ef5ea58656fa1 ""
-  "style/commands.tex" 1776336944.0274 2287 9b326ae67baef3bae713931f452edb82 ""
-  "style/project.sty" 1776336561.31897 4555 74c7bd358d87eb07844377c088d0308f ""
+  "style/commands.tex" 1776415838.09589 2291 753a76cb6b489d8519bae503773a54ab ""
+  "style/exercises.tex" 1776415342.44551 945 629f19b618dca49ecacdf5e9a2ef881d ""
+  "style/project.sty" 1776415330.07527 4579 73236ee234ae3a9af05312689b8f988a ""
   "style/theorems.tex" 1776336510.33453 3810 e40a42b44420e1fa299784aaf68810d8 ""
   (generated)
   "main.aux"
