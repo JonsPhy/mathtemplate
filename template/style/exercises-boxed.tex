@@ -1,0 +1,105 @@
+% ===========================================================================
+%  Exercises - boxed implementation (looks "colour" and "mono")
+% ---------------------------------------------------------------------------
+%  Selected by style/exercises.tex, which documents the commands.
+% ===========================================================================
+
+\newtcbtheorem[number within=section]{myexercise}{Exercise}{projectexcbox}{exc}
+
+\newtcbtheorem[use counter from=myexercise]{myhomework}{Homework}{projecthwbox}{hw}
+
+\NewDocumentCommand{\exercise}{m+m}{
+    \begin{myexercise}{#1}{}
+        #2
+    \end{myexercise}
+}
+
+\NewDocumentCommand{\exerciser}{mm+m}{
+    \begin{myexercise}{#1}{#2}
+        #3
+    \end{myexercise}
+}
+
+\NewDocumentCommand{\hw}{m+m}{
+    \begin{myhomework}{#1}{}
+        #2
+    \end{myhomework}
+}
+
+\NewDocumentCommand{\hwr}{mm+m}{
+    \begin{myhomework}{#1}{#2}
+        #3
+    \end{myhomework}
+}
+
+% ---------------------------------------------------------------------------
+%  Answer blocks
+% ---------------------------------------------------------------------------
+\newenvironment{exercisepf}{
+    {\noindent{\it \textbf{Answer:}}}
+    \tcolorbox[enhanced,breakable,colback=white,frame hidden,left=5mm,right=2mm,
+    top=1mm,bottom=1mm,boxsep=1mm,parbox=false,
+    before upper={\parindent0pt},
+    after skip=10pt,
+    borderline west={1mm}{0pt}{projectanswerrule}]
+}{
+    \textcolor{projectanswerrule}{\hbox{}\nobreak\hfill$\blacksquare$}
+    \endtcolorbox
+}
+
+\newenvironment{exercisepartanswer}{
+    \par
+    \vspace{2pt}
+    {\noindent{\it \textbf{Answer:}}}
+    \tcolorbox[enhanced,breakable,colback=white,frame hidden,left=5mm,right=2mm,
+    top=1mm,bottom=1mm,boxsep=1mm,parbox=false,
+    before upper={\parindent0pt},
+    after skip=6pt,
+    borderline west={1mm}{0pt}{projectpartrule}]
+}{
+    \textcolor{projectpartrule}{\hbox{}\nobreak\hfill$\blacksquare$}
+    \endtcolorbox
+}
+
+\newlist{exerciseparts}{enumerate}{1}
+\setlist[exerciseparts]{
+    label=\textcolor{projectpartlabel}{\textbf{\alph*)}},
+    leftmargin=2.6em,
+    itemsep=1.1em,
+    topsep=0.8em,
+    parsep=0pt
+}
+
+\NewDocumentEnvironment{ecparts}{}{
+    \begin{exerciseparts}
+}{
+    \end{exerciseparts}
+}
+
+\NewDocumentCommand{\ecpart}{m+m}{
+    \item #1
+
+    \begin{exercisepartanswer}
+        #2
+    \end{exercisepartanswer}
+}
+
+\NewDocumentCommand{\ec}{m+m+m}{
+    \begin{myexercise}{#1}{}
+        #2
+    \end{myexercise}
+
+    \begin{exercisepf}
+        #3
+    \end{exercisepf}
+}
+
+\NewDocumentCommand{\ecs}{m+m+m}{
+    \begin{myexercise}{#1}{}
+        #2
+    \end{myexercise}
+
+    \begin{ecparts}
+        #3
+    \end{ecparts}
+}

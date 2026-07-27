@@ -1,0 +1,94 @@
+% ===========================================================================
+%  Exercises - paper implementation (look "paper")
+% ---------------------------------------------------------------------------
+%  Plain amsthm environments, an italic run-in "Answer." for worked solutions
+%  and a plain a), b), ... list for subtasks. No boxes, no colour.
+%
+%  Selected by style/exercises.tex, which documents the commands.
+% ===========================================================================
+
+\theoremstyle{definition}
+\newtheorem{paperexercise}{Exercise}[section]
+\newtheorem{paperhomework}[paperexercise]{Homework}
+
+% Compatibility aliases for the environment names of the boxed look
+\newenvironment{myexercise}[2]{\begin{paperexercise}[#1]}{\end{paperexercise}}
+\newenvironment{myhomework}[2]{\begin{paperhomework}[#1]}{\end{paperhomework}}
+
+\NewDocumentCommand{\exercise}{m+m}{%
+    \IfBlankTF{#1}
+        {\begin{paperexercise}#2\end{paperexercise}}
+        {\begin{paperexercise}[#1]#2\end{paperexercise}}%
+}
+
+\NewDocumentCommand{\exerciser}{mm+m}{%
+    \IfBlankTF{#1}
+        {\begin{paperexercise}\label{exc:#2}#3\end{paperexercise}}
+        {\begin{paperexercise}[#1]\label{exc:#2}#3\end{paperexercise}}%
+}
+
+\NewDocumentCommand{\hw}{m+m}{%
+    \IfBlankTF{#1}
+        {\begin{paperhomework}#2\end{paperhomework}}
+        {\begin{paperhomework}[#1]#2\end{paperhomework}}%
+}
+
+\NewDocumentCommand{\hwr}{mm+m}{%
+    \IfBlankTF{#1}
+        {\begin{paperhomework}\label{hw:#2}#3\end{paperhomework}}
+        {\begin{paperhomework}[#1]\label{hw:#2}#3\end{paperhomework}}%
+}
+
+% ---------------------------------------------------------------------------
+%  Answer blocks
+% ---------------------------------------------------------------------------
+\newenvironment{exercisepf}{%
+    \par\addvspace{0.4em}%
+    \noindent\textit{Answer.}\ \ignorespaces
+}{%
+    \par\addvspace{0.6em}%
+}
+
+\newenvironment{exercisepartanswer}{%
+    \par\addvspace{0.2em}%
+    \noindent\textit{Answer.}\ \ignorespaces
+}{%
+    \par\addvspace{0.3em}%
+}
+
+\newlist{exerciseparts}{enumerate}{1}
+\setlist[exerciseparts]{
+    label=\textup{(\alph*)},
+    leftmargin=2.2em,
+    itemsep=0.8em,
+    topsep=0.6em,
+    parsep=0pt
+}
+
+\NewDocumentEnvironment{ecparts}{}{
+    \begin{exerciseparts}
+}{
+    \end{exerciseparts}
+}
+
+\NewDocumentCommand{\ecpart}{m+m}{%
+    \item #1
+
+    \begin{exercisepartanswer}
+        #2
+    \end{exercisepartanswer}
+}
+
+\NewDocumentCommand{\ec}{m+m+m}{%
+    \exercise{#1}{#2}
+    \begin{exercisepf}
+        #3
+    \end{exercisepf}
+}
+
+\NewDocumentCommand{\ecs}{m+m+m}{%
+    \exercise{#1}{#2}
+    \begin{ecparts}
+        #3
+    \end{ecparts}
+}

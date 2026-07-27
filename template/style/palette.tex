@@ -1,0 +1,136 @@
+% ===========================================================================
+%  Palette and box geometry
+% ---------------------------------------------------------------------------
+%  Single source of truth for every colour and every box frame in the project.
+%  Both style/project.sty (documents) and style/slides.sty (presentations)
+%  input this file, so a deck always matches its notes.
+%
+%  Requires: xcolor and tcolorbox loaded, and the switches \ifproject@mono and
+%  \ifproject@draft already declared and set.
+%
+%  Two looks, identical commands:
+%    colour  every box type has its own hue (default, good on screen)
+%    mono    black and white with thin rules, for a printed/handed-in thesis
+%
+%  Never hard-code a colour anywhere else - add a \colorlet here instead.
+% ===========================================================================
+
+\ifproject@mono
+    % -----------------------------------------------------------------------
+    %  Mono: uniform light title bar, white body, thin grey frame. The type
+    %  name in the title ("Definition", "Theorem", ...) carries the meaning.
+    % -----------------------------------------------------------------------
+    \colorlet{projectdefntitle}{black!12}   \colorlet{projectdefnback}{white}
+    \colorlet{projectthmtitle}{black!12}    \colorlet{projectthmback}{white}
+    \colorlet{projectlemtitle}{black!12}    \colorlet{projectlemback}{white}
+    \colorlet{projectcortitle}{black!12}    \colorlet{projectcorback}{white}
+    \colorlet{projectproptitle}{black!12}   \colorlet{projectpropback}{white}
+    \colorlet{projectclmtitle}{black!12}    \colorlet{projectclmback}{white}
+    \colorlet{projectfacttitle}{black!12}   \colorlet{projectfactback}{white}
+    \colorlet{projectexctitle}{black!12}    \colorlet{projectexcback}{white}
+    \colorlet{projecthwtitle}{black!18}     \colorlet{projecthwback}{white}
+
+    % Side rules of the attached proof / answer blocks
+    \colorlet{projectthmrule}{black!35}
+    \colorlet{projectlemrule}{black!35}
+    \colorlet{projectcorrule}{black!35}
+    \colorlet{projectproprule}{black!35}
+    \colorlet{projectclmrule}{black!35}
+    \colorlet{projectproofrule}{black!35}
+    \colorlet{projectsiderule}{black!35}
+    \colorlet{projectanswerrule}{black!35}
+    \colorlet{projectpartrule}{black!45}
+    \colorlet{projectpartlabel}{black}
+
+    % Miscellaneous
+    \colorlet{projectrmk}{black}            % inline \rmk
+    \colorlet{projectindexheading}{black}
+    \colorlet{projectrule}{black!45}        % decorative hairlines
+    \colorlet{projectaccent}{black}
+    \colorlet{projecttodo}{black}
+    \colorlet{projectwatermark}{black!7}
+
+    % Listings: printable black and white
+    \colorlet{projectlstback}{white}
+    \colorlet{projectlstfore}{black}
+    \colorlet{projectlstkeyword}{black}
+    \colorlet{projectlststring}{black!70}
+    \colorlet{projectlstcomment}{black!55}
+    \colorlet{projectlstidentifier}{black}
+    \colorlet{projectlstnumber}{black!55}
+    \colorlet{projectlstframe}{black!45}
+
+    % Visible hairline frame around every box
+    \tcbset{projectboxframe/.style={colframe=black!55, boxrule=0.4pt}}
+\else
+    % -----------------------------------------------------------------------
+    %  Colour: one hue per box type.
+    % -----------------------------------------------------------------------
+    \colorlet{projectdefntitle}{red!20!white}     \colorlet{projectdefnback}{red!10!white}
+    \colorlet{projectthmtitle}{purple!20!white}   \colorlet{projectthmback}{purple!10!white}
+    \colorlet{projectlemtitle}{violet!20!white}   \colorlet{projectlemback}{violet!10!white}
+    \colorlet{projectcortitle}{orange!20!white}   \colorlet{projectcorback}{orange!10!white}
+    \colorlet{projectproptitle}{yellow!30!white}  \colorlet{projectpropback}{yellow!20!white}
+    \colorlet{projectclmtitle}{pink!30!white}     \colorlet{projectclmback}{pink!20!white}
+    \colorlet{projectfacttitle}{blue!20!white}    \colorlet{projectfactback}{blue!8!white}
+    \colorlet{projectexctitle}{teal!20!white}     \colorlet{projectexcback}{teal!10!white}
+    \colorlet{projecthwtitle}{green!25!white}     \colorlet{projecthwback}{green!10!white}
+
+    \colorlet{projectthmrule}{purple!20!white}
+    \colorlet{projectlemrule}{violet!20!white}
+    \colorlet{projectcorrule}{orange!20!white}
+    \colorlet{projectproprule}{yellow!30!white}
+    \colorlet{projectclmrule}{pink!30!white}
+    \colorlet{projectproofrule}{black!20}
+    \colorlet{projectsiderule}{cyan!20!white}
+    \colorlet{projectanswerrule}{teal!30!black!25}
+    \colorlet{projectpartrule}{teal!50!black!35}
+    \colorlet{projectpartlabel}{teal!45!black}
+
+    \colorlet{projectrmk}{blue!60!black}
+    \colorlet{projectindexheading}{red!60!black}
+    \colorlet{projectrule}{gray!70}
+    \colorlet{projectaccent}{purple!60!black}
+    \colorlet{projecttodo}{orange!75!black}
+    \colorlet{projectwatermark}{black!8}
+
+    \colorlet{projectlstback}{black!85}
+    \colorlet{projectlstfore}{black!10}
+    \colorlet{projectlstkeyword}{orange!80!red}
+    \colorlet{projectlststring}{green!60!black!60!white}
+    \colorlet{projectlstcomment}{black!50}
+    \colorlet{projectlstidentifier}{cyan!40!white}
+    \colorlet{projectlstnumber}{black!30}
+    \colorlet{projectlstframe}{black!75}
+
+    % No frame line; the fill colour carries the box
+    \tcbset{projectboxframe/.style={frame hidden}}
+\fi
+
+% ---------------------------------------------------------------------------
+%  Box geometry
+% ---------------------------------------------------------------------------
+%  projectboxbase is shared by every numbered box. style/slides.sty appends to
+%  it (no page breaks, smaller title) so the same boxes fit on a slide.
+% ---------------------------------------------------------------------------
+\tcbset{
+    projectboxbase/.style={
+        enhanced,
+        breakable,
+        projectboxframe,
+        titlerule=0mm,
+        toptitle=1mm,
+        bottomtitle=1mm,
+        fonttitle=\bfseries\large,
+        coltitle=black,
+    },
+    projectdefnbox/.style={projectboxbase, colbacktitle=projectdefntitle, colback=projectdefnback},
+    projectthmbox/.style={projectboxbase,  colbacktitle=projectthmtitle,  colback=projectthmback},
+    projectlembox/.style={projectboxbase,  colbacktitle=projectlemtitle,  colback=projectlemback},
+    projectcorbox/.style={projectboxbase,  colbacktitle=projectcortitle,  colback=projectcorback},
+    projectpropbox/.style={projectboxbase, colbacktitle=projectproptitle, colback=projectpropback},
+    projectclmbox/.style={projectboxbase,  colbacktitle=projectclmtitle,  colback=projectclmback},
+    projectfactbox/.style={projectboxbase, colbacktitle=projectfacttitle, colback=projectfactback},
+    projectexcbox/.style={projectboxbase,  colbacktitle=projectexctitle,  colback=projectexcback},
+    projecthwbox/.style={projectboxbase,   colbacktitle=projecthwtitle,   colback=projecthwback},
+}

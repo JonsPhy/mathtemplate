@@ -1,200 +1,48 @@
-\newtcbtheorem[number within=section]{mydefinition}{Definition}
-{
-    enhanced,
-    frame hidden,
-    titlerule=0mm,
-    toptitle=1mm,
-    bottomtitle=1mm,
-    fonttitle=\bfseries\large,
-    coltitle=black,
-    colbacktitle=red!20!white,
-    colback=red!10!white,
-}{defn}
+% ===========================================================================
+%  Theorem system
+% ---------------------------------------------------------------------------
+%  One command set, two renderings. The look is chosen by a package option and
+%  nothing in your content ever changes:
+%
+%    colour / mono   coloured (or grey) tcolorbox boxes  -> theorems-boxed.tex
+%    paper           plain amsthm environments, no boxes -> theorems-paper.tex
+%
+%  Numbered (all share one counter, numbered within the section):
+%    Definition   \defn{Title}{body}          Theorem      \thm{Title}{body}
+%    Lemma        \lem{Title}{body}           Corollary    \cor{body}
+%    Proposition  \prop{body}                 Fact         \fact{body}
+%    Claim        \clm{Title}{body}           (unnumbered)
+%
+%  Unnumbered:
+%    Example      \ex{body}                   Remark        \rmkb{body}
+%    Fact         \factb{body}                Inline remark \rmk{text}
+%    Proof        \pf{body}
+%
+%  Suffixes:
+%    r   referenceable: adds a label argument, e.g.
+%          \defnr{Title}{label}{body}  ->  \ref{defn:label}
+%          \thmr{Title}{label}{body}   ->  \ref{thm:label}
+%    p   attaches a proof block, e.g.
+%          \lemp{Title}{body}{proof}, \corp{body}{proof}, \propp{body}{proof},
+%          \thmp{Title}{body}{proof}, \clmp{Title}{body}{proof}
+%    pr  both, e.g. \thmpr{Title}{label}{body}{proof}
+%
+%  An empty title argument is allowed: \lem{}{...} renders just "Lemma".
+%
+%  \defn indexes its title automatically. Override the key with
+%  \defn[key]{Title}{body}; suppress the entry with \defn[-]{Title}{body}.
+%
+%  All body arguments are declared "+m", so display math, align, itemize,
+%  tikzpicture, ... work inside them without extra bracing. The flip side is
+%  that \verb does not work there - write \texttt{\textbackslash cmd}.
+%
+%  Note: every numbered environment shares one counter, so in the boxed look
+%  cleveref cannot infer the type name --- use plain \ref{thm:label} and write
+%  the word ("Theorem \ref{thm:maschke}") yourself. That works in both looks.
+% ===========================================================================
 
-\newtcbtheorem[use counter from=mydefinition]{mytheorem}{Theorem}
-{
-    enhanced,
-    frame hidden,
-    titlerule=0mm,
-    toptitle=1mm,
-    bottomtitle=1mm,
-    fonttitle=\bfseries\large,
-    coltitle=black,
-    colbacktitle=purple!20!white,
-    colback=purple!10!white,
-}{thm}
-
-\newtcbtheorem[use counter from=mydefinition]{mylemma}{Lemma}
-{
-    enhanced,
-    frame hidden,
-    titlerule=0mm,
-    toptitle=1mm,
-    bottomtitle=1mm,
-    fonttitle=\bfseries\large,
-    coltitle=black,
-    colbacktitle=violet!20!white,
-    colback=violet!10!white,
-}{lem}
-
-\newtcbtheorem[use counter from=mydefinition]{mycorollary}{Corollary}
-{
-    enhanced,
-    frame hidden,
-    titlerule=0mm,
-    toptitle=1mm,
-    bottomtitle=1mm,
-    fonttitle=\bfseries\large,
-    coltitle=black,
-    colbacktitle=orange!20!white,
-    colback=orange!10!white,
-}{cor}
-
-\newtcbtheorem[use counter from=mydefinition]{myproposition}{Proposition}
-{
-    enhanced,
-    frame hidden,
-    titlerule=0mm,
-    toptitle=1mm,
-    bottomtitle=1mm,
-    fonttitle=\bfseries\large,
-    coltitle=black,
-    colbacktitle=yellow!30!white,
-    colback=yellow!20!white,
-}{prop}
-
-\newtcbtheorem[use counter from=mydefinition]{myfact}{Fact}
-{
-    enhanced,
-    frame hidden,
-    titlerule=0mm,
-    toptitle=1mm,
-    bottomtitle=1mm,
-    fonttitle=\bfseries\large,
-    coltitle=black,
-    colbacktitle=blue!20!white,
-    colback=blue!8!white,
-}{fact}
-
-\NewDocumentCommand{\defn}{m+m}{
-    \begin{mydefinition}{#1}{}
-        #2
-    \end{mydefinition}
-}
-
-\NewDocumentCommand{\defnr}{mm+m}{
-    \begin{mydefinition}{#1}{#2}
-        #3
-    \end{mydefinition}
-}
-
-\NewDocumentCommand{\thm}{m+m}{
-    \begin{mytheorem}{#1}{}
-        #2
-    \end{mytheorem}
-}
-
-\NewDocumentCommand{\thmr}{mm+m}{
-    \begin{mytheorem}{#1}{#2}
-        #3
-    \end{mytheorem}
-}
-
-\NewDocumentCommand{\lem}{m+m}{
-    \begin{mylemma}{#1}{}
-        #2
-    \end{mylemma}
-}
-
-\NewDocumentCommand{\cor}{+m}{
-    \begin{mycorollary}{}{}
-        #1
-    \end{mycorollary}
-}
-
-\NewDocumentCommand{\prop}{+m}{
-    \begin{myproposition}{}{}
-        #1
-    \end{myproposition}
-}
-
-\NewDocumentCommand{\fact}{+m}{
-    \begin{myfact}{}{}
-        #1
-    \end{myfact}
-}
-
-\newenvironment{projectproof}[1][Proof.]{
-    \par
-    \noindent\textit{\textbf{#1}}\par
-    \begin{tcolorbox}[
-        blanker,
-        breakable,
-        left=5mm,
-        parbox=false,
-        before upper={\parindent15pt},
-        after skip=10pt,
-        borderline west={1mm}{0pt}{black!20}
-    ]
-}{
-    \hfill$\blacksquare$
-    \end{tcolorbox}
-}
-
-\NewDocumentCommand{\pf}{+m}{
-    \begin{projectproof}
-        #1
-    \end{projectproof}
-}
-
-\newenvironment{example}{
-    \par
-    \vspace{5pt}
-    \noindent\textbf{Example.}
-    \begin{tcolorbox}[
-        blanker,
-        breakable,
-        left=5mm,
-        parbox=false,
-        before upper={\parindent15pt},
-        after skip=10pt,
-        borderline west={1mm}{0pt}{cyan!20!white}
-    ]
-}{
-    \end{tcolorbox}
-    \vspace{5pt}
-}
-
-\NewDocumentCommand{\ex}{+m}{
-    \begin{example}
-        #1
-    \end{example}
-}
-
-\newenvironment{remark}{
-    \par
-    \vspace{5pt}
-    \noindent\textbf{Remark.}
-    \begin{tcolorbox}[
-        blanker,
-        breakable,
-        left=5mm,
-        parbox=false,
-        before upper={\parindent15pt},
-        after skip=10pt,
-        borderline west={1mm}{0pt}{cyan!20!white}
-    ]
-}{
-    \end{tcolorbox}
-    \vspace{5pt}
-}
-
-\NewDocumentCommand{\rmk}{+m}{
-    {\itshape\color{blue!60!black}#1}
-}
-
-\NewDocumentCommand{\rmkb}{+m}{
-    \begin{remark}
-        #1
-    \end{remark}
-}
+\ifproject@paper
+    \input{style/theorems-paper}
+\else
+    \input{style/theorems-boxed}
+\fi

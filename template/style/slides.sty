@@ -1,0 +1,227 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{style/slides}[2026/07/26 v1.0 Beamer layer for the project template]
+
+% ===========================================================================
+%  Slides
+% ---------------------------------------------------------------------------
+%  Load this from a beamer document instead of style/project. It gives you the
+%  SAME commands as the notes - \defn, \thm, \lemp, \ex, \rmkb, \ec, \permu,
+%  \N, \R, ... - so any paragraph of a chapter can be pasted into a frame, or
+%  pulled in wholesale with \inputcontent.
+%
+%  Options (same names as style/project):
+%    colour / mono / paper
+%                     look of the theorem environments. Unlike the document,
+%                     slides default to "colour" whether or not you are
+%                     drafting - boxes are what a projector needs. "paper"
+%                     switches to plain amsthm environments here too.
+%    final / draft    draft adds a DRAFT stripe to every slide and shows
+%                     \todo{...} notes. Default: final.
+%
+%  Metadata (title, author, ...) is read from the project's metadata.tex, so
+%  a deck never drifts from the document.
+%
+%  See slides/slides.tex for a ready-to-copy deck.
+% ===========================================================================
+\newif\ifproject@mono   \project@monofalse
+\newif\ifproject@paper  \project@paperfalse
+\newif\ifproject@draft  \project@draftfalse
+
+\DeclareOption{colour}{\project@monofalse\project@paperfalse}
+\DeclareOption{color}{\project@monofalse\project@paperfalse}
+\DeclareOption{mono}{\project@monotrue\project@paperfalse}
+\DeclareOption{bw}{\project@monotrue\project@paperfalse}
+\DeclareOption{paper}{\project@papertrue\project@monotrue}
+\DeclareOption{serious}{\project@papertrue\project@monotrue}
+\DeclareOption{draft}{\project@drafttrue}
+\DeclareOption{final}{\project@draftfalse}
+\ProcessOptions\relax
+
+% ===========================================================================
+%  Packages (beamer already provides xcolor, hyperref and amsmath)
+% ===========================================================================
+\usepackage[main=english,ngerman]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+\usepackage{mathtools}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{mathrsfs}
+\usepackage{physics}
+\usepackage{siunitx}
+\usepackage{ytableau}
+\usepackage{slashed}
+
+\usepackage{enumitem}
+\usepackage{tabularx}
+\usepackage{booktabs}
+
+\usepackage{graphicx}
+\graphicspath{{figures/}{../figures/}{../../figures/}{./}{../}}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,calc,cd,hobby,decorations.pathreplacing}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.17}
+
+\usepackage[most]{tcolorbox}
+\tcbuselibrary{theorems,skins,breakable}
+
+% ===========================================================================
+%  Shared palette, then the shared commands and boxes
+% ===========================================================================
+\input{style/palette}
+
+% Slides have no page breaks and less room, so shrink the boxes a little.
+\tcbset{
+    projectboxbase/.append style={
+        unbreakable,
+        fonttitle=\bfseries,
+        left=2mm, right=2mm, top=1mm, bottom=1mm,
+    },
+}
+
+% Beamer ships its own "example" and "fact" theorem blocks under exactly these
+% names. Clear them so the project versions (identical to the notes) win.
+\let\fact\undefined
+\let\example\undefined   \let\endexample\undefined
+\let\remark\undefined    \let\endremark\undefined
+
+% Beamer hides theorem numbers unless asked; the paper look wants them.
+\ifproject@paper \setbeamertemplate{theorems}[numbered] \fi
+
+\input{style/commands}
+\input{style/theorems}
+\input{style/exercises}
+
+% ===========================================================================
+%  Beamer look, derived from the same palette
+% ===========================================================================
+\usetheme{default}
+\usefonttheme{serif}          % same look as the notes, and proper math fonts
+\usepackage{lmodern}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{itemize items}[circle]
+\setbeamertemplate{blocks}[rounded][shadow=false]
+
+\setbeamercolor{structure}{fg=projectaccent}
+\setbeamercolor{frametitle}{fg=black, bg=}
+\setbeamercolor{title}{fg=black}
+\setbeamercolor{author}{fg=black!75}
+\setbeamercolor{institute}{fg=black!75}
+\setbeamercolor{date}{fg=black!75}
+\setbeamerfont{frametitle}{series=\bfseries, size=\large}
+
+% Title rule under every frame title, matching \projectquote in the notes
+\setbeamertemplate{frametitle}{%
+    \vspace{0.6em}
+    \usebeamerfont{frametitle}\usebeamercolor[fg]{frametitle}\insertframetitle\par
+    \vspace{-0.35em}
+    {\color{projectrule}\rule{\textwidth}{0.4pt}}\par
+    \vspace{-0.2em}
+}
+
+\setbeamertemplate{footline}{%
+    \hfill
+    \raisebox{1.2ex}{%
+        \makebox[\dimexpr\paperwidth-2em][r]{%
+            \tiny\color{black!55}
+            \ifproject@draft \projectwatermarktext\quad\fi
+            \insertshorttitle\quad\insertframenumber/\inserttotalframenumber
+        }%
+    }%
+    \vspace{0.6ex}%
+}
+
+\ifproject@draft
+    \newcommand{\projectwatermarktext}{DRAFT}
+    \setbeamertemplate{background}{%
+        \begin{tikzpicture}[overlay, remember picture]
+            \node[rotate=35] at (current page.center) {%
+                \resizebox{0.62\paperwidth}{!}{%
+                    \color{projectwatermark}\sffamily\bfseries
+                    \projectwatermarktext
+                }%
+            };
+        \end{tikzpicture}%
+    }
+    \NewDocumentCommand{\todo}{+m}{{\normalfont\bfseries\color{projecttodo}[TODO: #1]}}
+    \NewDocumentCommand{\draftonly}{+m}{#1}
+    \NewDocumentCommand{\finalonly}{+m}{}
+\else
+    \newcommand{\projectwatermarktext}{}
+    \NewDocumentCommand{\todo}{+m}{}
+    \NewDocumentCommand{\draftonly}{+m}{}
+    \NewDocumentCommand{\finalonly}{+m}{#1}
+\fi
+
+% ===========================================================================
+%  Title slide, built from metadata.tex
+% ===========================================================================
+%  \makeslidetitle           title frame using the project metadata
+%  \makeslidetitle[Subtitle] override the subtitle for this deck
+% ===========================================================================
+\NewDocumentCommand{\makeslidetitle}{o}{%
+    \title{\projecttitle}
+    \subtitle{\IfNoValueTF{#1}{\projectsubtitle}{#1}}
+    \author{\projectauthor}
+    \institute{\projectdepartment\\\projectinstitution}
+    \date{\projectdate}
+    \begin{frame}[plain]
+        \titlepage
+        \vspace{-1.2em}
+        \projectlogocenter{height=1.6cm}
+    \end{frame}
+}
+
+% A divider slide announcing the next section
+\NewDocumentCommand{\sectionframe}{m}{%
+    \section{#1}
+    \begin{frame}[plain]
+        \vfill
+        \begin{center}
+            {\usebeamerfont{frametitle}\usebeamercolor[fg]{structure}\Large #1\par}
+            \vspace{0.4em}
+            {\color{projectrule}\rule{0.4\textwidth}{0.4pt}}
+        \end{center}
+        \vfill
+    \end{frame}
+}
+
+% ===========================================================================
+%  Importing chapter files
+% ---------------------------------------------------------------------------
+%  \inputcontent{../content/02_foundations}
+%
+%  Meant to be used inside a frame that allows breaks:
+%
+%    \begin{frame}[allowframebreaks]{Foundations}
+%        \inputcontent{../content/02_foundations}
+%    \end{frame}
+%
+%  Inside the import, \chapter is dropped (the frame title already names the
+%  chapter), each \section starts a new slide with a bold heading, and
+%  \subsection becomes a run-in heading. The first section does not break, so
+%  no empty slide appears.
+% ===========================================================================
+\newif\ifproject@firstheading
+
+\newcommand{\project@slideheading}[2]{%
+    \ifproject@firstheading
+        \project@firstheadingfalse
+    \else
+        \framebreak
+    \fi
+    {#1 #2\par}\vspace{0.3em}%
+}
+
+\NewDocumentCommand{\inputcontent}{m}{%
+    \begingroup
+        \project@firstheadingtrue
+        \DeclareDocumentCommand{\chapter}{s o m}{}%
+        \DeclareDocumentCommand{\section}{s o m}{\project@slideheading{\bfseries}{##3}}%
+        \DeclareDocumentCommand{\subsection}{s o m}{\par\vspace{0.3em}{\bfseries ##3}\par}%
+        \DeclareDocumentCommand{\subsubsection}{s o m}{\par{\itshape ##3}\par}%
+        \input{#1}%
+    \endgroup
+}

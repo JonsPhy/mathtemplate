@@ -1,22 +1,49 @@
 \chapter{Foundations}
 
-\section{Basic Math Commands}
+\section{Basic math commands}
 
 Your standard shortcuts are already available:
 \[
 \N \subset \Z \subset \Q \subset \R \subset \C.
 \]
 
-\thm{Sample theorem}{
-Let \(V\) be a vector space over \(\R\). Then \(0 \cdot v = 0\) for all \(v \in V\).
-}
+\section{Theorem environments}
 
-\pf{
+Each one comes in up to four flavours: plain, referenceable (\texttt{r}), with
+an attached proof (\texttt{p}), and both (\texttt{pr}). In the \texttt{paper}
+look they are plain \texttt{amsthm} environments, in the \texttt{colour} and
+\texttt{mono} looks the same commands render as boxes.
+
+\thmpr{Sample theorem}{sample}{
+Let \(V\) be a vector space over \(\R\). Then \(0 \cdot v = 0\) for all
+\(v \in V\).
+}{
 This follows from distributivity:
 \[
 0 \cdot v = (0 + 0) \cdot v = 0 \cdot v + 0 \cdot v.
 \]
 Subtracting \(0 \cdot v\) from both sides gives the claim.
+}
+
+All numbered environments share one counter, so refer to them with plain
+\verb|\ref| and write the type word yourself: the statement above is
+Theorem~\ref{thm:sample}.
+
+\lemp{}{
+An empty title argument renders just ``Lemma''.
+}{
+Nothing to show.
+}
+
+\propp{
+Propositions and corollaries carry no title at all.
+}{
+Their proof block is attached with \texttt{\textbackslash propp} and \texttt{\textbackslash corp}.
+}
+
+\fact{
+\texttt{\textbackslash fact} is numbered, while \texttt{\textbackslash factb}
+is an unnumbered aside like a remark.
 }
 
 \ex{
@@ -26,6 +53,15 @@ The permutation helper from the notes project is also included:
 \]
 }
 
-\exercise{permotations}{
+\section{Exercises}
+
+\exercise{Permutations}{
 Compute \(\permu{1,2,3,4}{2,3,4,1}\).
+}
+
+\ec{Exercise with an answer}{
+State the order of the cycle \((1\,2\,3)\).
+}{
+It is \(3\), since applying the cycle three times returns every element to its
+starting position.
 }

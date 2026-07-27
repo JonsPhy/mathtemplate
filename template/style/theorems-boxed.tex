@@ -1,0 +1,331 @@
+% ===========================================================================
+%  Theorem system - boxed implementation (looks "colour" and "mono")
+% ---------------------------------------------------------------------------
+%  Selected by style/theorems.tex, which documents the commands. Colours and
+%  frames come from style/palette.tex; the paper look lives in
+%  style/theorems-paper.tex and must define exactly the same commands.
+% ===========================================================================
+
+% ---------------------------------------------------------------------------
+%  Box definitions
+% ---------------------------------------------------------------------------
+\newtcbtheorem[number within=section]{mydefinition}{Definition}{projectdefnbox}{defn}
+
+\newtcbtheorem[use counter from=mydefinition]{mytheorem}{Theorem}{projectthmbox}{thm}
+
+\newtcbtheorem[use counter from=mydefinition]{mylemma}{Lemma}{projectlembox}{lem}
+
+\newtcbtheorem[use counter from=mydefinition]{mycorollary}{Corollary}{projectcorbox}{cor}
+
+\newtcbtheorem[use counter from=mydefinition]{myproposition}{Proposition}{projectpropbox}{prop}
+
+\newtcbtheorem[use counter from=mydefinition]{myclaim}{Claim}{projectclmbox}{clm}
+
+\newtcbtheorem[use counter from=mydefinition]{myfact}{Fact}{projectfactbox}{fact}
+
+% ---------------------------------------------------------------------------
+%  Proof blocks (side rule matching the parent box, see style/palette.tex)
+% ---------------------------------------------------------------------------
+\NewDocumentEnvironment{projectrulebox}{m}{
+    {\noindent{\it \textbf{Proof:}}}
+    \tcolorbox[blanker,breakable,left=5mm,parbox=false,
+        before upper={\parindent0pt},
+        after skip=10pt,
+        borderline west={1mm}{0pt}{#1}]
+}{
+    \endtcolorbox
+}
+
+\newenvironment{thmpf}{
+    \begin{projectrulebox}{projectthmrule}
+}{
+    \textcolor{projectthmrule}{\hbox{}\nobreak\hfill$\blacksquare$}
+    \end{projectrulebox}
+}
+
+\newenvironment{lempf}{
+    \begin{projectrulebox}{projectlemrule}
+}{
+    \textcolor{projectlemrule}{\hbox{}\nobreak\hfill$\blacksquare$}
+    \end{projectrulebox}
+}
+
+\newenvironment{corpf}{
+    \begin{projectrulebox}{projectcorrule}
+}{
+    \textcolor{projectcorrule}{\hbox{}\nobreak\hfill$\blacksquare$}
+    \end{projectrulebox}
+}
+
+\newenvironment{proppf}{
+    \begin{projectrulebox}{projectproprule}
+}{
+    \textcolor{projectproprule}{\hbox{}\nobreak\hfill$\blacksquare$}
+    \end{projectrulebox}
+}
+
+\newenvironment{clmpf}{
+    \begin{projectrulebox}{projectclmrule}
+}{
+    \textcolor{projectclmrule}{\hbox{}\nobreak\hfill$\blacksquare$}
+    \end{projectrulebox}
+}
+
+% Neutral standalone proof, also usable with an own heading:
+%   \begin{projectproof}[Sketch of proof.] ... \end{projectproof}
+\newenvironment{projectproof}[1][Proof.]{
+    \par
+    \noindent\textit{\textbf{#1}}\par
+    \begin{tcolorbox}[
+        blanker,
+        breakable,
+        left=5mm,
+        parbox=false,
+        before upper={\parindent0pt},
+        after skip=10pt,
+        borderline west={1mm}{0pt}{projectproofrule}
+    ]
+}{
+    \hfill$\blacksquare$
+    \end{tcolorbox}
+}
+
+\NewDocumentCommand{\pf}{+m}{
+    \begin{projectproof}
+        #1
+    \end{projectproof}
+}
+
+% ---------------------------------------------------------------------------
+%  Definition
+% ---------------------------------------------------------------------------
+\NewDocumentCommand{\defn}{o m+m}{
+    \IfNoValueTF{#1}{\index{#2}}{%
+        \def\defn@key{#1}\def\defn@nosig{-}%
+        \ifx\defn@key\defn@nosig\else\index{#1}\fi%
+    }%
+    \begin{mydefinition}{#2}{}
+        #3
+    \end{mydefinition}
+}
+
+\NewDocumentCommand{\defnr}{o mm+m}{
+    \IfNoValueTF{#1}{\index{#2}}{%
+        \def\defn@key{#1}\def\defn@nosig{-}%
+        \ifx\defn@key\defn@nosig\else\index{#1}\fi%
+    }%
+    \begin{mydefinition}{#2}{#3}
+        #4
+    \end{mydefinition}
+}
+
+% ---------------------------------------------------------------------------
+%  Theorem
+% ---------------------------------------------------------------------------
+\NewDocumentCommand{\thm}{m+m}{
+    \begin{mytheorem}{#1}{}
+        #2
+    \end{mytheorem}
+}
+
+\NewDocumentCommand{\thmr}{mm+m}{
+    \begin{mytheorem}{#1}{#2}
+        #3
+    \end{mytheorem}
+}
+
+\NewDocumentCommand{\thmp}{m+m+m}{
+    \begin{mytheorem}{#1}{}
+        #2
+    \end{mytheorem}
+
+    \begin{thmpf}
+        #3
+    \end{thmpf}
+}
+
+\NewDocumentCommand{\thmpr}{mm+m+m}{
+    \begin{mytheorem}{#1}{#2}
+        #3
+    \end{mytheorem}
+
+    \begin{thmpf}
+        #4
+    \end{thmpf}
+}
+
+% ---------------------------------------------------------------------------
+%  Lemma
+% ---------------------------------------------------------------------------
+\NewDocumentCommand{\lem}{m+m}{
+    \begin{mylemma}{#1}{}
+        #2
+    \end{mylemma}
+}
+
+\NewDocumentCommand{\lemr}{mm+m}{
+    \begin{mylemma}{#1}{#2}
+        #3
+    \end{mylemma}
+}
+
+\NewDocumentCommand{\lemp}{m+m+m}{
+    \begin{mylemma}{#1}{}
+        #2
+    \end{mylemma}
+
+    \begin{lempf}
+        #3
+    \end{lempf}
+}
+
+\NewDocumentCommand{\lempr}{mm+m+m}{
+    \begin{mylemma}{#1}{#2}
+        #3
+    \end{mylemma}
+
+    \begin{lempf}
+        #4
+    \end{lempf}
+}
+
+% ---------------------------------------------------------------------------
+%  Corollary (no title)
+% ---------------------------------------------------------------------------
+\NewDocumentCommand{\cor}{+m}{
+    \begin{mycorollary}{}{}
+        #1
+    \end{mycorollary}
+}
+
+\NewDocumentCommand{\corr}{m+m}{
+    \begin{mycorollary}{}{#1}
+        #2
+    \end{mycorollary}
+}
+
+\NewDocumentCommand{\corp}{+m+m}{
+    \begin{mycorollary}{}{}
+        #1
+    \end{mycorollary}
+
+    \begin{corpf}
+        #2
+    \end{corpf}
+}
+
+% ---------------------------------------------------------------------------
+%  Proposition (no title)
+% ---------------------------------------------------------------------------
+\NewDocumentCommand{\prop}{+m}{
+    \begin{myproposition}{}{}
+        #1
+    \end{myproposition}
+}
+
+\NewDocumentCommand{\propr}{m+m}{
+    \begin{myproposition}{}{#1}
+        #2
+    \end{myproposition}
+}
+
+\NewDocumentCommand{\propp}{+m+m}{
+    \begin{myproposition}{}{}
+        #1
+    \end{myproposition}
+
+    \begin{proppf}
+        #2
+    \end{proppf}
+}
+
+% ---------------------------------------------------------------------------
+%  Claim (unnumbered)
+% ---------------------------------------------------------------------------
+\NewDocumentCommand{\clm}{m+m}{
+    \begin{myclaim*}{#1}{}
+        #2
+    \end{myclaim*}
+}
+
+\NewDocumentCommand{\clmp}{m+m+m}{
+    \begin{myclaim*}{#1}{}
+        #2
+    \end{myclaim*}
+
+    \begin{clmpf}
+        #3
+    \end{clmpf}
+}
+
+% ---------------------------------------------------------------------------
+%  Fact
+% ---------------------------------------------------------------------------
+\NewDocumentCommand{\fact}{+m}{
+    \begin{myfact}{}{}
+        #1
+    \end{myfact}
+}
+
+% ---------------------------------------------------------------------------
+%  Side-rule blocks: example, remark, unnumbered fact
+% ---------------------------------------------------------------------------
+\NewDocumentEnvironment{projectsideblock}{m}{
+    \par
+    \vspace{5pt}
+    \noindent\textbf{#1}
+    \begin{tcolorbox}[
+        blanker,
+        breakable,
+        left=5mm,
+        parbox=false,
+        before upper={\parindent0pt},
+        after skip=10pt,
+        borderline west={1mm}{0pt}{projectsiderule}
+    ]
+}{
+    \end{tcolorbox}
+    \vspace{5pt}
+}
+
+\newenvironment{example}{
+    \begin{projectsideblock}{Example.}
+}{
+    \end{projectsideblock}
+}
+
+\NewDocumentCommand{\ex}{+m}{
+    \begin{example}
+        #1
+    \end{example}
+}
+
+\newenvironment{remark}{
+    \begin{projectsideblock}{Remark.}
+}{
+    \end{projectsideblock}
+}
+
+\NewDocumentCommand{\rmkb}{+m}{
+    \begin{remark}
+        #1
+    \end{remark}
+}
+
+% Inline remark: a short italic blue aside inside running text
+\NewDocumentCommand{\rmk}{+m}{
+    {\itshape\color{projectrmk}#1}
+}
+
+% Unnumbered fact, styled like a remark (the numbered version is \fact)
+\newenvironment{factenv}{
+    \begin{projectsideblock}{Fact.}
+}{
+    \end{projectsideblock}
+}
+
+\NewDocumentCommand{\factb}{+m}{
+    \begin{factenv}
+        #1
+    \end{factenv}
+}

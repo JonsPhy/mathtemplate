@@ -1,14 +1,101 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{style/project}[2026/04/16 Combined LaTeX project template]
+\ProvidesPackage{style/project}[2026/07/26 v3.0 Combined LaTeX project template]
 
-% Language and typography
-\usepackage[english,ngerman]{babel}
+% ===========================================================================
+%  Package options
+% ---------------------------------------------------------------------------
+%   final / draft       final (the default) is the version you hand in: no
+%                       watermark and \todo{...} notes print nothing. draft
+%                       adds a light DRAFT watermark behind the text, a footer
+%                       with the compilation date, and shows the notes.
+%
+%   LOOK - paper / mono / colour
+%                       paper (aliases: serious) has NO boxes at all: plain
+%                       amsthm environments, bold run-in headings, italic
+%                       statements, QED square, black and white - the standard
+%                       layout of a mathematics or physics paper.
+%                       mono (alias: bw) keeps the boxes but renders them in
+%                       greys, colour (alias: color) gives every box type its
+%                       own hue.
+%                       Default: paper for the final version, colour while
+%                       drafting. Naming a look explicitly always wins.
+%                       Your content never changes - only the rendering.
+%
+%   indent / noindent   paragraph style. Default: indented paragraphs in the
+%                       paper look, blank-line spacing otherwise.
+%   biblatex / bibtex   bibliography backend. Default: biblatex + biber with
+%                       author-only italic citations. "bibtex" falls back to
+%                       natbib + bibtex and uses \projectbibliographystyle.
+%   index / noindex     build the index of definitions. Default: index.
+% ===========================================================================
+\newif\ifproject@noindent  \project@noindenttrue
+\newif\ifproject@biblatex  \project@biblatextrue
+\newif\ifproject@index     \project@indextrue
+\newif\ifproject@mono      \project@monofalse
+\newif\ifproject@paper     \project@paperfalse
+\newif\ifproject@draft     \project@draftfalse
+
+% Tri-state, resolved after \ProcessOptions: auto | colour | mono | paper
+\def\project@look{auto}
+% Tri-state: auto | indent | noindent
+\def\project@par{auto}
+
+\DeclareOption{colour}{\def\project@look{colour}}
+\DeclareOption{color}{\def\project@look{colour}}
+\DeclareOption{mono}{\def\project@look{mono}}
+\DeclareOption{bw}{\def\project@look{mono}}
+\DeclareOption{paper}{\def\project@look{paper}}
+\DeclareOption{serious}{\def\project@look{paper}}
+\DeclareOption{indent}{\def\project@par{indent}}
+\DeclareOption{noindent}{\def\project@par{noindent}}
+\DeclareOption{biblatex}{\project@biblatextrue}
+\DeclareOption{bibtex}{\project@biblatexfalse}
+\DeclareOption{index}{\project@indextrue}
+\DeclareOption{noindex}{\project@indexfalse}
+\DeclareOption{draft}{\project@drafttrue}
+\DeclareOption{final}{\project@draftfalse}
+\ProcessOptions\relax
+
+% --- resolve the look -------------------------------------------------------
+\def\project@auto{auto}
+\def\project@mono@{mono}
+\def\project@paper@{paper}
+\def\project@indent@{indent}
+
+\ifx\project@look\project@auto
+    \ifproject@draft
+        \def\project@look{colour}
+    \else
+        \def\project@look{paper}
+    \fi
+\fi
+% The paper look is black and white by definition, so it also selects the
+% mono half of style/palette.tex (listings, index heading, hairlines).
+\ifx\project@look\project@paper@ \project@papertrue \project@monotrue \fi
+\ifx\project@look\project@mono@  \project@monotrue \fi
+
+% --- resolve the paragraph style -------------------------------------------
+\ifx\project@par\project@auto
+    \ifproject@paper
+        \def\project@par{indent}
+    \else
+        \def\project@par{noindent}
+    \fi
+\fi
+\ifx\project@par\project@indent@ \project@noindentfalse \else \project@noindenttrue \fi
+
+% ===========================================================================
+%  Language and typography
+% ===========================================================================
+\usepackage[main=english,ngerman]{babel}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage{textcomp}
 \usepackage{lmodern}
 
-% Math
+% ===========================================================================
+%  Math
+% ===========================================================================
 \usepackage{amsmath}
 \usepackage{mathtools}
 \usepackage{amssymb}
@@ -17,39 +104,119 @@
 \usepackage{mathrsfs}
 \usepackage{physics}
 \usepackage{siunitx}
+\usepackage{ytableau}   % Young tableaux
+\usepackage{slashed}    % Feynman slash notation
 
-% Layout
+% ===========================================================================
+%  Layout
+% ===========================================================================
 \usepackage[a4paper,margin=2.5cm,headheight=14pt]{geometry}
 \usepackage{setspace}
-\usepackage{parskip}
 \usepackage{enumitem}
 \usepackage{fancyhdr}
 \usepackage{float}
 \usepackage{lscape}
 \usepackage{tabularx}
 \setstretch{1.1}
-\parindent0pt
-\parskip0.35em
 
-% Graphics
+\ifproject@noindent
+    \usepackage{parskip}
+    \parindent0pt
+    \parskip0.35em
+\else
+    % Classic indented paragraphs with no extra skip, as in a journal article
+    \parindent15pt
+    \parskip0pt
+\fi
+
+% ===========================================================================
+%  Graphics
+% ===========================================================================
 \usepackage{graphicx}
-\graphicspath{{figures/}}
+% Figures resolve whether the document sits in the project root or in a
+% subdirectory such as exercises/ or slides/, and whether they are written
+% as \includegraphics{fig.pdf} or \includegraphics{figures/fig.pdf}.
+\graphicspath{{figures/}{../figures/}{../../figures/}{./}{../}}
 \usepackage{tikz}
-\usetikzlibrary{arrows.meta,calc,cd}
+\usetikzlibrary{arrows.meta,calc,cd,hobby,decorations.pathreplacing}
 \usepackage{pgfplots}
 \pgfplotsset{compat=1.17}
 
-% Color and theorem boxes
+% ===========================================================================
+%  Color and theorem boxes
+% ===========================================================================
 \usepackage[dvipsnames]{xcolor}
 \usepackage{framed}
 \usepackage{environ}
 \usepackage[most]{tcolorbox}
 \tcbuselibrary{theorems,skins,breakable}
 
-% Bibliography and links
-\usepackage[numbers,square]{natbib}
-\usepackage[hyphens]{url}
+% Colours and box geometry for both looks (colour / mono)
+\input{style/palette}
+
+% ===========================================================================
+%  Bibliography
+% ---------------------------------------------------------------------------
+%  Default (biblatex + biber): in-text citations print the italic family name
+%  only, without the year --- \cite{key} -> "Author",
+%  \citep{key} -> "(Author)", \cite[Chapter~5]{key} adds a postnote.
+%  With the [bibtex] option the classic natbib numeric style is used instead.
+% ===========================================================================
+\PassOptionsToPackage{hyphens}{url}
+\usepackage{csquotes}   % recommended by biblatex when babel is loaded
+\ifproject@biblatex
+    \usepackage[
+        style=authoryear-comp,
+        sorting=nty,
+        backend=biber,
+        doi=true,
+        url=true,
+        isbn=false,
+        maxnames=4,
+        date=year,
+        natbib=true
+    ]{biblatex}
+    % Suppress the year in in-text citations; show only the italic last name
+    \renewbibmacro*{cite:labeldate+extradate}{}
+    \DeclareNameFormat{lastonly}{\namepartfamily}
+    \newcommand*{\mkbibparensit}[1]{\mkbibparens{\textit{#1}}}
+    \DeclareCiteCommand{\parencite}[\mkbibparensit]
+      {\usebibmacro{prenote}}
+      {\usebibmacro{citeindex}\printnames[lastonly]{labelname}}
+      {\multicitedelim}
+      {\usebibmacro{postnote}}
+    \DeclareCiteCommand{\cite}[\textit]
+      {\usebibmacro{prenote}}
+      {\usebibmacro{citeindex}\printnames[lastonly]{labelname}}
+      {\multicitedelim}
+      {\usebibmacro{postnote}}
+    \DeclareCiteCommand{\textcite}
+      {\usebibmacro{prenote}}
+      {\usebibmacro{citeindex}\textit{\printnames[lastonly]{labelname}}}
+      {\multicitedelim}
+      {\usebibmacro{postnote}}
+    % Make \citep and \citet go through the same custom commands
+    \AtBeginDocument{%
+      \let\citep\parencite
+      \let\citet\textcite
+    }
+\else
+    \usepackage[numbers,square]{natbib}
+\fi
+\usepackage{url}
 \def\UrlBreaks{\do\/\do-\do\_\do\.}
+
+% Loads the .bib database named in metadata.tex. Call it in the preamble of
+% main.tex (after \input{metadata}); it is a no-op in [bibtex] mode.
+\newcommand{\projectloadbibliography}{%
+    \ifproject@biblatex
+        \addbibresource{\projectbibliographyfile.bib}%
+    \fi
+}
+
+% ===========================================================================
+%  Links
+% ===========================================================================
 \usepackage[hidelinks]{hyperref}
 \hypersetup{
     hidelinks,
@@ -58,27 +225,56 @@
     filecolor=magenta,
     urlcolor=blue
 }
+
+% ===========================================================================
+%  Index of definitions
+% ---------------------------------------------------------------------------
+%  \defn / \defnr add their title to the index automatically; see
+%  style/theorems.tex. Two-column layout comes from style/index.ist, which
+%  .latexmkrc hands to makeindex.
+% ===========================================================================
+\ifproject@index
+    \usepackage{makeidx}
+    \makeindex
+    \usepackage[
+        columns=2,
+        columnsep=2.5em,
+        rule=0.2pt,
+        font=small,
+        itemlayout=relhang,
+        justific=RaggedRight,
+        initsep=1.1em
+    ]{idxlayout}
+    % \AtBeginDocument, because babel resets the caption names
+    \AtBeginDocument{\renewcommand{\indexname}{Index of Definitions}}
+    \newcommand{\indexheading}[1]{%
+        \par\medskip
+        {\large\bfseries\color{projectindexheading}#1}\par
+        \vspace{0.2em}
+    }
+    \setindexprenote{%
+        \small\color{black!65}
+        Definitions are collected automatically from the definition boxes.
+    }
+\fi
+
 \usepackage[nameinlink,noabbrev]{cleveref}
 
-% Code listings
+% ===========================================================================
+%  Code listings
+% ===========================================================================
 \usepackage{listings}
-\definecolor{background}{rgb}{0.15, 0.15, 0.15}
-\definecolor{foreground}{rgb}{0.9, 0.9, 0.9}
-\definecolor{keywordcolor}{rgb}{0.98, 0.47, 0.24}
-\definecolor{stringcolor}{rgb}{0.68, 0.91, 0.65}
-\definecolor{commentcolor}{rgb}{0.5, 0.5, 0.5}
-\definecolor{identifiercolor}{rgb}{0.65, 0.85, 1.0}
-\definecolor{numbercolor}{rgb}{0.8, 0.8, 0.8}
-\definecolor{framecolor}{rgb}{0.25, 0.25, 0.25}
+% Colours come from style/palette.tex: a dark theme in colour mode, plain
+% black on white in mono mode.
 
 \lstdefinestyle{projectlisting}{
-    backgroundcolor=\color{background},
-    basicstyle=\ttfamily\small\color{foreground},
-    commentstyle=\color{commentcolor}\textit,
-    keywordstyle=\color{keywordcolor}\bfseries,
-    stringstyle=\color{stringcolor},
-    identifierstyle=\color{identifiercolor},
-    numberstyle=\tiny\color{numbercolor},
+    backgroundcolor=\color{projectlstback},
+    basicstyle=\ttfamily\small\color{projectlstfore},
+    commentstyle=\color{projectlstcomment}\textit,
+    keywordstyle=\color{projectlstkeyword}\bfseries,
+    stringstyle=\color{projectlststring},
+    identifierstyle=\color{projectlstidentifier},
+    numberstyle=\tiny\color{projectlstnumber},
     breakatwhitespace=false,
     breaklines=true,
     captionpos=b,
@@ -91,7 +287,7 @@
     tabsize=4,
     xleftmargin=15pt,
     frame=single,
-    rulecolor=\color{framecolor},
+    rulecolor=\color{projectlstframe},
     frameround=tttt,
     aboveskip=10pt,
     belowskip=10pt,
@@ -99,7 +295,9 @@
 }
 \lstset{style=projectlisting}
 
-% Header and footer
+% ===========================================================================
+%  Header and footer
+% ===========================================================================
 \pagestyle{fancy}
 \fancyhf{}
 \fancyhead[L]{\nouppercase{\leftmark}}
@@ -107,16 +305,62 @@
 \renewcommand{\headrulewidth}{0.4pt}
 \setlength{\headheight}{14pt}
 
-% Section numbering in TOC depth
+% Sectioning depth
 \setcounter{tocdepth}{2}
 \setcounter{secnumdepth}{3}
 
-% Inputs
+% ===========================================================================
+%  Draft mode
+% ---------------------------------------------------------------------------
+%  [draft] puts a light "DRAFT" watermark behind the text, prints a footer
+%  line with the compilation date, and shows \todo{...} notes. [final] (the
+%  default) removes all of it, so the same source produces the print version.
+%
+%  \todo{...}            visible only in draft
+%  \draftonly{...}       typeset only in draft
+%  \finalonly{...}       typeset only in the final version
+%  \projectwatermarktext redefine to change the watermark word
+% ===========================================================================
+\newcommand{\projectwatermarktext}{DRAFT}
+
+\ifproject@draft
+    \usepackage{eso-pic}
+    \AddToShipoutPictureBG{%
+        \AtTextCenter{%
+            \makebox(0,0)[c]{%
+                \rotatebox{45}{%
+                    % Scaled to the text width, so any word fits on the page
+                    \resizebox{1.05\textwidth}{!}{%
+                        \color{projectwatermark}\sffamily\bfseries
+                        \projectwatermarktext
+                    }%
+                }%
+            }%
+        }%
+    }
+    \fancyfoot[C]{\footnotesize\itshape\color{black!55}%
+        \projectwatermarktext\ --- compiled \today}
+    \NewDocumentCommand{\todo}{+m}{%
+        {\normalfont\bfseries\color{projecttodo}[TODO: #1]}%
+    }
+    \NewDocumentCommand{\draftonly}{+m}{#1}
+    \NewDocumentCommand{\finalonly}{+m}{}
+\else
+    \NewDocumentCommand{\todo}{+m}{}
+    \NewDocumentCommand{\draftonly}{+m}{}
+    \NewDocumentCommand{\finalonly}{+m}{#1}
+\fi
+
+% ===========================================================================
+%  Project macros and environments
+% ===========================================================================
 \input{style/commands}
 \input{style/theorems}
 \input{style/exercises}
 
-% Front/back matter helpers for report class
+% ===========================================================================
+%  Front/back matter helpers for the report class
+% ===========================================================================
 \newcommand{\frontmatter}{
     \clearpage
     \pagenumbering{roman}
@@ -133,7 +377,9 @@
     \clearpage
 }
 
-% Title page
+% ===========================================================================
+%  Title page
+% ===========================================================================
 \newcommand{\makeprojecttitle}{
     \hypersetup{pageanchor=false}
     \begin{titlepage}
@@ -145,11 +391,7 @@
         {\Large \projectsubtitle\par}
 
         \vspace{1.8cm}
-        \IfFileExists{\projectlogo}{
-            \includegraphics[width=0.28\textwidth]{\projectlogo}\par
-        }{
-            \fbox{\rule{0pt}{3cm}\rule{0.28\textwidth}{0pt}}\par
-        }
+        \projectlogobox{width=0.28\textwidth}\par
 
         \vspace{1.6cm}
         {\Large \projecttype\par}
@@ -168,11 +410,37 @@
     \hypersetup{pageanchor=true}
 }
 
+% Header for a standalone exercise sheet (article class), see exercises/
+\newcommand{\makesheettitle}[1]{
+    \begin{center}
+        {\LARGE\bfseries #1\par}
+        \vspace{0.5em}
+        {\color{projectrule}\rule{0.72\textwidth}{0.5pt}\par}
+    \end{center}
+}
+
+% Epigraph at the start of a chapter. Spacing is stated positively so that it
+% holds with and without \parskip.
+\newcommand{\projectquote}[1]{
+    \begin{center}
+        {\large\itshape #1\par}
+        \vspace{0.35em}
+        {\color{projectrule}\rule{0.32\textwidth}{0.5pt}\par}
+    \end{center}
+}
+
+% ===========================================================================
+%  Back matter blocks
+% ===========================================================================
 \newcommand{\printprojectbibliography}{
     \cleardoublepage
-    \addcontentsline{toc}{chapter}{Bibliography}
-    \bibliographystyle{\projectbibliographystyle}
-    \bibliography{\projectbibliographyfile}
+    \ifproject@biblatex
+        \printbibliography[heading=bibintoc]
+    \else
+        \addcontentsline{toc}{chapter}{Bibliography}
+        \bibliographystyle{\projectbibliographystyle}
+        \bibliography{\projectbibliographyfile}
+    \fi
 
     \ifincludeauthordeclaration
         \cleardoublepage
@@ -181,5 +449,14 @@
         \authordeclarationtext\par
         \vspace{1.6cm}
         \projectauthor\hfill\projectdate\par
+    \fi
+}
+
+\newcommand{\printprojectindex}{
+    \ifproject@index
+        \cleardoublepage
+        \phantomsection
+        \addcontentsline{toc}{chapter}{\indexname}
+        \printindex
     \fi
 }

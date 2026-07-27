@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(latexmk -pdf main.tex)",
+      "Bash(latexmk -pdf -silent main.tex)",
+      "Bash(latexmk -pdf -interaction=nonstopmode main.tex)",
+      "Bash(latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex)",
+      "Bash(latexmk -pdf slides/slides.tex)",
+      "Bash(latexmk -pdf exercises/sheet01.tex)",
+      "Bash(latexmk -C)",
+      "Bash(pdflatex -interaction=nonstopmode main.tex)"
+    ]
+  }
+}

@@ -1,49 +1,26 @@
-\newtcbtheorem[number within=section]{myexercise}{Exercise}
-{
-    enhanced,
-    frame hidden,
-    titlerule=0mm,
-    toptitle=1mm,
-    bottomtitle=1mm,
-    fonttitle=\bfseries\large,
-    coltitle=black,
-    colbacktitle=teal!20!white,
-    colback=teal!10!white,
-}{ex}
+% ===========================================================================
+%  Exercises and homework
+% ---------------------------------------------------------------------------
+%  One command set, two renderings, chosen by the package option:
+%
+%    colour / mono   coloured (or grey) boxes   -> exercises-boxed.tex
+%    paper           plain amsthm environments  -> exercises-paper.tex
+%
+%  Statement only (numbered within the section, own counter):
+%    \exercise{Title}{statement}          \exerciser{Title}{label}{statement}
+%    \hw{Title}{statement}                \hwr{Title}{label}{statement}
+%
+%  Statement plus worked answer (for solved exercise sheets):
+%    \ec{Title}{statement}{answer}                 one answer block
+%    \ecs{Title}{statement}{parts}                 a), b), c) subtasks, where
+%        parts = \ecpart{question}{answer} \ecpart{question}{answer} ...
+%
+%  All body arguments are "+m", so displays, lists and tikz work inside them.
+%  See exercises/sheet01.tex for a ready-to-copy standalone sheet.
+% ===========================================================================
 
-\newtcbtheorem[use counter from=myexercise]{myhomework}{Homework}
-{
-    enhanced,
-    frame hidden,
-    titlerule=0mm,
-    toptitle=1mm,
-    bottomtitle=1mm,
-    fonttitle=\bfseries\large,
-    coltitle=black,
-    colbacktitle=green!25!white,
-    colback=green!10!white,
-}{hw}
-
-\NewDocumentCommand{\exercise}{m+m}{
-    \begin{myexercise}{#1}{}
-        #2
-    \end{myexercise}
-}
-
-\NewDocumentCommand{\exerciser}{mm+m}{
-    \begin{myexercise}{#1}{#2}
-        #3
-    \end{myexercise}
-}
-
-\NewDocumentCommand{\hw}{m+m}{
-    \begin{myhomework}{#1}{}
-        #2
-    \end{myhomework}
-}
-
-\NewDocumentCommand{\hwr}{mm+m}{
-    \begin{myhomework}{#1}{#2}
-        #3
-    \end{myhomework}
-}
+\ifproject@paper
+    \input{style/exercises-paper}
+\else
+    \input{style/exercises-boxed}
+\fi

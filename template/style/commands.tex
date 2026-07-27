@@ -1,3 +1,59 @@
+% ===========================================================================
+%  Personal shorthand macros
+% ---------------------------------------------------------------------------
+%  Number sets, common upright symbols and operators, plus \permu for drawing
+%  permutation diagrams:  \permu{1,2,3}{2,3,1}  (top row, images).
+% ===========================================================================
+
+% ---------------------------------------------------------------------------
+%  Locating a file from any directory
+% ---------------------------------------------------------------------------
+%  \projectfindfile{path} puts the first of
+%      path      ../path      ../../path
+%  that actually exists into \projectfoundfile, or leaves it empty.
+%
+%  Needed because \IfFileExists also searches \input@path - which exercise
+%  sheets and slides extend with "../" so they can load style/project - while
+%  \includegraphics searches \graphicspath. The two disagree for documents
+%  that do not sit in the project root, which silently loses the image.
+%  Resolving the path once, here, keeps them in step.
+% ---------------------------------------------------------------------------
+\newcommand{\projectfoundfile}{}
+
+\newcommand{\projectfindfile}[1]{%
+    \begingroup
+        \let\input@path\@undefined
+        \IfFileExists{#1}%
+            {\gdef\projectfoundfile{#1}}%
+            {\IfFileExists{../#1}%
+                {\gdef\projectfoundfile{../#1}}%
+                {\IfFileExists{../../#1}%
+                    {\gdef\projectfoundfile{../../#1}}%
+                    {\gdef\projectfoundfile{}}}}%
+    \endgroup
+}
+
+% Include \projectlogo if it can be found, otherwise leave a placeholder frame
+% of the same width. #1 = \includegraphics options.
+\newcommand{\projectlogobox}[1]{%
+    \projectfindfile{\projectlogo}%
+    \ifx\projectfoundfile\empty
+        \fbox{\rule{0pt}{3cm}\rule{0.28\textwidth}{0pt}}%
+    \else
+        \includegraphics[#1]{\projectfoundfile}%
+    \fi
+}
+
+% Centred logo, or nothing at all if there is none. Everything stays inside
+% this one macro: a conditional wrapped around \begin{center} would break
+% inside a beamer frame, whose body is collected and re-scanned.
+\newcommand{\projectlogocenter}[1]{%
+    \projectfindfile{\projectlogo}%
+    \ifx\projectfoundfile\empty\else
+        {\par\centering\includegraphics[#1]{\projectfoundfile}\par}%
+    \fi
+}
+
 \newcommand{\N}{\mathbb{N}}
 \newcommand{\Z}{\mathbb{Z}}
 \newcommand{\Q}{\mathbb{Q}}
@@ -62,8 +118,11 @@
 
             \int_compare:nNnTF { \l__permu_target_int } > { 0 }
             {
-                \pgfsetlinewidth{0.9pt}
-                \draw (permutop##1.south) -- (permubot\int_use:N \l__permu_target_int.north);
+                {
+                    \pgfsetlinewidth{0.9pt}
+                    \draw
+                        (permutop##1.south) -- (permubot\int_use:N \l__permu_target_int.north);
+                }
             }
             {
                 \msg_error:nnn { permu } { missing-image } { ##2 }

@@ -1,15 +1,31 @@
 \chapter{Introduction}
 
-This template is designed for longer mathematics or physics documents that mix structured exposition, reusable theorem environments, figures, and bibliography support.
+\projectquote{``Everything should be made as simple as possible, but no simpler.''}
 
-\section{How to Use It}
+This template is designed for longer mathematics or physics documents that mix
+structured exposition, reusable theorem environments, figures, exercises and
+bibliography support.
 
-Start by editing `metadata.tex`, then replace these starter chapters with your own material. The package setup is centralized in `style/project.sty`, while reusable macros live in `style/commands.tex`.
+\section{How to use it}
+
+Start by editing \texttt{metadata.tex}, then replace these starter chapters with
+your own material. The package setup is centralized in
+\texttt{style/project.sty}, while reusable macros live in
+\texttt{style/commands.tex}.
 
 \defn{Template idea}{
-    A good project template keeps recurring setup in one place so that future documents can focus on content rather than package cleanup.
+    A good project template keeps recurring setup in one place so that future
+    documents can focus on content rather than package cleanup.
 }
 
+Every \verb|\defn| title is added to the ``Index of Definitions'' at the end of
+the document automatically. Use \verb|\defn[key]{Title}{...}| to index a
+different key, or \verb|\defn[-]{Title}{...}| to skip the entry.
+
 \rmkb{
-If a future project needs fewer features, remove them from `style/project.sty` instead of letting the preamble grow ad hoc inside `main.tex`.
+If a future project needs fewer features, switch them off through the package
+options in \texttt{main.tex} rather than letting the preamble grow ad hoc.
 }
+
+\citep{HaiounDefiningextendedTQFTshandleattachments2026}
+\citep{AmbrosinoMonodromydefectsChernSimonstheoryHolography2026}

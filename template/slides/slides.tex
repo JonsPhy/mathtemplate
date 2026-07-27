@@ -1,0 +1,78 @@
+% ===========================================================================
+%  Presentation
+% ---------------------------------------------------------------------------
+%  Same commands as the notes, same metadata, same palette. Options match
+%  style/project: [mono] for black and white, [draft] for a DRAFT stripe.
+%
+%  Build:  latexmk -pdf slides/slides.tex        -> out/slides.pdf
+% ===========================================================================
+\documentclass[aspectratio=169,11pt,t]{beamer}
+
+\makeatletter
+\def\input@path{{../}{}}
+\makeatother
+\usepackage{style/slides}
+
+\input{metadata}
+
+\begin{document}
+
+\makeslidetitle[Seminar talk]
+
+\begin{frame}{Outline}
+    \tableofcontents
+\end{frame}
+
+% ---------------------------------------------------------------------------
+%  1. Writing slides directly - every note command works unchanged
+% ---------------------------------------------------------------------------
+\sectionframe{Hand-written slides}
+
+\begin{frame}{The environments you already use}
+    \defn{Template idea}{
+        Keep recurring setup in one place, so a document can focus on content.
+    }
+
+    \thm{Sample theorem}{
+        Let \(V\) be a vector space over \(\R\). Then \(0 \cdot v = 0\) for all
+        \(v \in V\).
+    }
+\end{frame}
+
+\begin{frame}{Lists, math and remarks}
+    \begin{itemize}
+        \item Copy a paragraph straight out of \texttt{content/}.
+        \item The macros are identical: \(\N \subset \Z \subset \Q \subset \R\).
+        \item Permutation diagrams work too: \(\permu{1,2,3}{2,3,1}\).
+    \end{itemize}
+
+    \rmkb{
+        In the box looks, boxes are unbreakable on slides. If one overflows,
+        split the frame in two or allow frame breaks.
+    }
+\end{frame}
+
+% ---------------------------------------------------------------------------
+%  2. Importing a chapter wholesale
+% ---------------------------------------------------------------------------
+\sectionframe{Imported from the notes}
+
+% \inputcontent turns \chapter and \section inside the file into slide
+% headings and starts a new slide at each one.
+\begin{frame}[allowframebreaks]{Foundations}
+    \inputcontent{content/02_foundations}
+\end{frame}
+
+% ---------------------------------------------------------------------------
+%  3. Closing
+% ---------------------------------------------------------------------------
+\begin{frame}[plain]
+    \vfill
+    \begin{center}
+        {\Large Thank you.\par}
+        \todo{add the outlook slide}
+    \end{center}
+    \vfill
+\end{frame}
+
+\end{document}

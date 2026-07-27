@@ -1,8 +1,30 @@
+% ===========================================================================
+%  Main document
+% ---------------------------------------------------------------------------
+%  Options for style/project (all optional):
+%    final | draft      final is the version you hand in; draft adds a DRAFT
+%                       watermark and shows \todo{...} notes
+%    paper | mono | colour
+%                       paper has no boxes at all: plain amsthm environments,
+%                       black and white, the layout of a maths/physics paper.
+%                       mono keeps the boxes in grey, colour gives each type
+%                       its own hue. Default: paper when final, colour when
+%                       drafting. Naming a look explicitly always wins.
+%    indent | noindent  paragraph style (default: indent in the paper look)
+%    biblatex | bibtex  biblatex + biber, or natbib + bibtex
+%    index | noindex    with or without the "Index of Definitions"
+%
+%  Handing it in:     \usepackage{style/project}                 (= paper)
+%  Working on it:     \usepackage[draft]{style/project}          (= colour)
+%  Watermarked paper: \usepackage[draft,paper]{style/project}
+%  The commands never change, only the rendering.
+% ===========================================================================
 \documentclass[a4paper,11pt,oneside]{report}
 
-\usepackage{style/project}
+\usepackage[draft]{style/project}
 
 \input{metadata}
+\projectloadbibliography
 
 \begin{document}
 
@@ -18,5 +40,6 @@
 
 \backmatter
 \printprojectbibliography
+\printprojectindex
 
 \end{document}

@@ -1,0 +1,209 @@
+% ===========================================================================
+%  Theorem system - paper implementation (look "paper")
+% ---------------------------------------------------------------------------
+%  No boxes, no colour: plain amsthm environments as used by every physics and
+%  mathematics journal.
+%
+%    plain style       Theorem, Lemma, Corollary, Proposition, Fact, Claim
+%                      bold run-in head, italic statement
+%    definition style  Definition, Example, Exercise, Homework
+%                      bold run-in head, upright text
+%    remark style      Remark, unnumbered Example, unnumbered Fact
+%                      italic head, upright text
+%    proof             amsthm proof environment with the QED square
+%
+%  Numbering matches the boxed look: one shared counter, numbered within the
+%  section, so switching looks never renumbers anything.
+%
+%  Selected by style/theorems.tex, which documents the commands. Every command
+%  defined in style/theorems-boxed.tex must also be defined here.
+% ===========================================================================
+
+% ---------------------------------------------------------------------------
+%  Environments
+% ---------------------------------------------------------------------------
+\theoremstyle{plain}
+\newtheorem{papertheorem}{Theorem}[section]
+\newtheorem{paperlemma}[papertheorem]{Lemma}
+\newtheorem{papercorollary}[papertheorem]{Corollary}
+\newtheorem{paperproposition}[papertheorem]{Proposition}
+\newtheorem{paperfact}[papertheorem]{Fact}
+\newtheorem*{paperclaim}{Claim}
+
+\theoremstyle{definition}
+\newtheorem{paperdefinition}[papertheorem]{Definition}
+
+\theoremstyle{remark}
+\newtheorem*{paperexample}{Example}
+\newtheorem*{paperremark}{Remark}
+\newtheorem*{paperfactstar}{Fact}
+
+% Compatibility aliases for the environment names of the boxed look, so that
+% content written against either implementation compiles under both.
+\newenvironment{mydefinition}[2]{\begin{paperdefinition}[#1]}{\end{paperdefinition}}
+\newenvironment{mytheorem}[2]{\begin{papertheorem}[#1]}{\end{papertheorem}}
+\newenvironment{mylemma}[2]{\begin{paperlemma}[#1]}{\end{paperlemma}}
+\newenvironment{mycorollary}[2]{\begin{papercorollary}}{\end{papercorollary}}
+\newenvironment{myproposition}[2]{\begin{paperproposition}}{\end{paperproposition}}
+\newenvironment{example}{\begin{paperexample}}{\end{paperexample}}
+\newenvironment{remark}{\begin{paperremark}}{\end{paperremark}}
+\newenvironment{factenv}{\begin{paperfactstar}}{\end{paperfactstar}}
+
+% Proof blocks. The boxed look gives each box type its own coloured rule; on
+% paper they are all the one standard proof environment.
+\newenvironment{projectproof}[1][\proofname]{\begin{proof}[#1]}{\end{proof}}
+\newenvironment{thmpf}{\begin{proof}}{\end{proof}}
+\newenvironment{lempf}{\begin{proof}}{\end{proof}}
+\newenvironment{corpf}{\begin{proof}}{\end{proof}}
+\newenvironment{proppf}{\begin{proof}}{\end{proof}}
+\newenvironment{clmpf}{\begin{proof}}{\end{proof}}
+
+% ---------------------------------------------------------------------------
+%  Definition - the title is still indexed automatically
+% ---------------------------------------------------------------------------
+\NewDocumentCommand{\defn}{o m+m}{%
+    \IfNoValueTF{#1}{\index{#2}}{%
+        \def\defn@key{#1}\def\defn@nosig{-}%
+        \ifx\defn@key\defn@nosig\else\index{#1}\fi%
+    }%
+    \IfBlankTF{#2}
+        {\begin{paperdefinition}#3\end{paperdefinition}}
+        {\begin{paperdefinition}[#2]#3\end{paperdefinition}}%
+}
+
+\NewDocumentCommand{\defnr}{o mm+m}{%
+    \IfNoValueTF{#1}{\index{#2}}{%
+        \def\defn@key{#1}\def\defn@nosig{-}%
+        \ifx\defn@key\defn@nosig\else\index{#1}\fi%
+    }%
+    \IfBlankTF{#2}
+        {\begin{paperdefinition}\label{defn:#3}#4\end{paperdefinition}}
+        {\begin{paperdefinition}[#2]\label{defn:#3}#4\end{paperdefinition}}%
+}
+
+% ---------------------------------------------------------------------------
+%  Theorem
+% ---------------------------------------------------------------------------
+\NewDocumentCommand{\thm}{m+m}{%
+    \IfBlankTF{#1}
+        {\begin{papertheorem}#2\end{papertheorem}}
+        {\begin{papertheorem}[#1]#2\end{papertheorem}}%
+}
+
+\NewDocumentCommand{\thmr}{mm+m}{%
+    \IfBlankTF{#1}
+        {\begin{papertheorem}\label{thm:#2}#3\end{papertheorem}}
+        {\begin{papertheorem}[#1]\label{thm:#2}#3\end{papertheorem}}%
+}
+
+\NewDocumentCommand{\thmp}{m+m+m}{%
+    \thm{#1}{#2}
+    \begin{proof}#3\end{proof}%
+}
+
+\NewDocumentCommand{\thmpr}{mm+m+m}{%
+    \thmr{#1}{#2}{#3}
+    \begin{proof}#4\end{proof}%
+}
+
+% ---------------------------------------------------------------------------
+%  Lemma
+% ---------------------------------------------------------------------------
+\NewDocumentCommand{\lem}{m+m}{%
+    \IfBlankTF{#1}
+        {\begin{paperlemma}#2\end{paperlemma}}
+        {\begin{paperlemma}[#1]#2\end{paperlemma}}%
+}
+
+\NewDocumentCommand{\lemr}{mm+m}{%
+    \IfBlankTF{#1}
+        {\begin{paperlemma}\label{lem:#2}#3\end{paperlemma}}
+        {\begin{paperlemma}[#1]\label{lem:#2}#3\end{paperlemma}}%
+}
+
+\NewDocumentCommand{\lemp}{m+m+m}{%
+    \lem{#1}{#2}
+    \begin{proof}#3\end{proof}%
+}
+
+\NewDocumentCommand{\lempr}{mm+m+m}{%
+    \lemr{#1}{#2}{#3}
+    \begin{proof}#4\end{proof}%
+}
+
+% ---------------------------------------------------------------------------
+%  Corollary (no title)
+% ---------------------------------------------------------------------------
+\NewDocumentCommand{\cor}{+m}{%
+    \begin{papercorollary}#1\end{papercorollary}%
+}
+
+\NewDocumentCommand{\corr}{m+m}{%
+    \begin{papercorollary}\label{cor:#1}#2\end{papercorollary}%
+}
+
+\NewDocumentCommand{\corp}{+m+m}{%
+    \begin{papercorollary}#1\end{papercorollary}
+    \begin{proof}#2\end{proof}%
+}
+
+% ---------------------------------------------------------------------------
+%  Proposition (no title)
+% ---------------------------------------------------------------------------
+\NewDocumentCommand{\prop}{+m}{%
+    \begin{paperproposition}#1\end{paperproposition}%
+}
+
+\NewDocumentCommand{\propr}{m+m}{%
+    \begin{paperproposition}\label{prop:#1}#2\end{paperproposition}%
+}
+
+\NewDocumentCommand{\propp}{+m+m}{%
+    \begin{paperproposition}#1\end{paperproposition}
+    \begin{proof}#2\end{proof}%
+}
+
+% ---------------------------------------------------------------------------
+%  Claim (unnumbered)
+% ---------------------------------------------------------------------------
+\NewDocumentCommand{\clm}{m+m}{%
+    \IfBlankTF{#1}
+        {\begin{paperclaim}#2\end{paperclaim}}
+        {\begin{paperclaim}[#1]#2\end{paperclaim}}%
+}
+
+\NewDocumentCommand{\clmp}{m+m+m}{%
+    \clm{#1}{#2}
+    \begin{proof}#3\end{proof}%
+}
+
+% ---------------------------------------------------------------------------
+%  Fact
+% ---------------------------------------------------------------------------
+\NewDocumentCommand{\fact}{+m}{%
+    \begin{paperfact}#1\end{paperfact}%
+}
+
+\NewDocumentCommand{\factb}{+m}{%
+    \begin{paperfactstar}#1\end{paperfactstar}%
+}
+
+% ---------------------------------------------------------------------------
+%  Proof, example, remark
+% ---------------------------------------------------------------------------
+\NewDocumentCommand{\pf}{+m}{%
+    \begin{proof}#1\end{proof}%
+}
+
+\NewDocumentCommand{\ex}{+m}{%
+    \begin{paperexample}#1\end{paperexample}%
+}
+
+\NewDocumentCommand{\rmkb}{+m}{%
+    \begin{paperremark}#1\end{paperremark}%
+}
+
+% Inline remark: an italic aside inside running text
+\NewDocumentCommand{\rmk}{+m}{%
+    {\itshape\color{projectrmk}#1}%
+}

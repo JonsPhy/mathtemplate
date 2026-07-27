@@ -1,0 +1,46 @@
+% ===========================================================================
+%  Standalone exercise sheet
+% ---------------------------------------------------------------------------
+%  Compiles on its own (article class) while reusing the project style. The
+%  \input@path trick makes \usepackage{style/project} resolve from the project
+%  root, one directory up.
+%
+%  Build:  latexmk -pdf exercises/sheet01.tex
+% ===========================================================================
+\documentclass[a4paper,11pt,oneside]{article}
+
+\makeatletter
+\def\input@path{{../}{}}
+\makeatother
+\usepackage[noindex]{style/project}
+
+\begin{document}
+
+\makesheettitle{Course Name: Exercise Sheet 1}
+
+% The sheet number drives the exercise numbering (1.1, 1.2, ...)
+\setcounter{section}{1}
+
+\ec{A single-answer exercise}{
+    State the statement of the exercise here. Body arguments accept displays,
+    lists and tikz pictures without extra bracing:
+    \[
+        \permu{1,2,3}{2,3,1}.
+    \]
+}{
+    Write the worked answer here.
+}
+
+\ecs{An exercise with subtasks}{
+    Shared preamble for the parts below.
+}{
+    \ecpart{First subtask.}{
+        Answer to the first subtask.
+    }
+
+    \ecpart{Second subtask.}{
+        Answer to the second subtask.
+    }
+}
+
+\end{document}

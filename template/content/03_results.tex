@@ -1,10 +1,19 @@
-\chapter{Results and References}
+\chapter{Results and references}
 
 \section{Citations}
 
-The template uses `natbib`, so a citation looks like 
+By default the template uses \texttt{biblatex} with the \texttt{biber} backend
+and prints author-only citations: \verb|\cite{key}| gives \cite{sample-reference},
+\verb|\citep{key}| gives \citep{sample-reference}, and a postnote is added with
+\verb|\cite[Chapter~5]{key}| \cite[Chapter~5]{sample-reference}.
+
+Entries live in \texttt{ref/references.bib}. Loading the template with the
+\texttt{[bibtex]} option switches back to \texttt{natbib} with the style named
+in \texttt{metadata.tex}.
 
 \section{Figures}
+
+Figures are looked up in \texttt{figures/} automatically.
 
 \begin{figure}[H]
     \centering
@@ -12,3 +21,10 @@ The template uses `natbib`, so a citation looks like
     \caption{Placeholder figure area for future projects.}
 \end{figure}
 
+\section{Draft mode}
+
+Loading the template with \texttt{[draft]} puts a light watermark behind the
+text, adds a footer with the compilation date, and reveals notes to
+self: \todo{write the conclusion} --- the same note prints nothing in the final
+version. \draftonly{This sentence only exists in the draft.}
+\finalonly{This sentence only exists in the final version.}
